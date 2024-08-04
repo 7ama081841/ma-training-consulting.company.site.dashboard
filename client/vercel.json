@@ -1,0 +1,3 @@
+{
+  "rewrites": [{ "source": "/demos/:path*", "destination": "/:path*" }]
+}
