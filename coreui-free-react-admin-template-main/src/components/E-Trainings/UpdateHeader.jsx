@@ -1,10 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
-import axios from 'axios';
-import { storage } from '../../config/firebaseConfig';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import React, { useRef, useState, useEffect } from 'react'
+import axios from 'axios'
+import { storage } from '../../config/firebaseConfig'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 const UpdateHeader = ({ checkHeader, setReRender }) => {
-  const [reRenderUpdate, setReRenderUpdate] = useState(false);
+  const [reRenderUpdate, setReRenderUpdate] = useState(false)
   const [headerData, setHeaderData] = useState({
     Heading_6: checkHeader?.Heading_6,
     Heading_2_start_text: checkHeader?.Heading_2_start_text,
@@ -19,92 +19,99 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
     leftRectangleLink: checkHeader?.leftRectangleLink,
     middleRectangleLink: checkHeader?.middleRectangleLink,
     rightRectangleLink: checkHeader?.rightRectangleLink,
-    headerFile: checkHeader?.headerFile
-  });
+    headerFile: checkHeader?.headerFile,
+  })
 
-  const headerfileRef = useRef(null);
-  const [fileURL, setFileURL] = useState(null);
+  const headerfileRef = useRef(null)
+  const [fileURL, setFileURL] = useState(null)
 
   useEffect(() => {
     return () => {
-      console.log('fileURL', fileURL);
+      console.log('fileURL', fileURL)
       if (fileURL) {
-        URL.revokeObjectURL(fileURL);
+        URL.revokeObjectURL(fileURL)
       }
-    };
-  }, [fileURL]);
+    }
+  }, [fileURL])
 
   useEffect(() => {
     if (reRenderUpdate === true) {
-      setReRenderUpdate(false);
+      setReRenderUpdate(false)
     }
-  }, [reRenderUpdate]);
+  }, [reRenderUpdate])
 
   const handleChangeHeaderFile = (e) => {
-    console.log(' is changed ');
+    console.log(' is changed ')
     if (fileURL) {
-      URL.revokeObjectURL(fileURL);
+      URL.revokeObjectURL(fileURL)
     }
-    const file = e.target.files[0];
+    const file = e.target.files[0]
     if (file) {
-      const newFileURL = URL.createObjectURL(file);
+      const newFileURL = URL.createObjectURL(file)
       setHeaderData((prevState) => ({
         ...prevState,
-        headerFile: file
-      }));
-      setFileURL(newFileURL);
+        headerFile: file,
+      }))
+      setFileURL(newFileURL)
     }
-  };
+  }
 
   const handleClickHeaderFile = () => {
-    headerfileRef.current.click();
-  };
+    headerfileRef.current.click()
+  }
 
   const handleChangeHeaderData = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setHeaderData((prevState) => ({
       ...prevState,
-      [name]: value
-    }));
-  };
+      [name]: value,
+    }))
+  }
 
   const handleSubmitHeaderData = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
       const uploadFile = async (file, filePath) => {
         if (!file) {
-          return console.log('file is empty');
+          return console.log('file is empty')
         }
-        const storageRef = ref(storage, filePath);
-        await uploadBytes(storageRef, file);
-        return getDownloadURL(storageRef);
-      };
+        const storageRef = ref(storage, filePath)
+        await uploadBytes(storageRef, file)
+        return getDownloadURL(storageRef)
+      }
 
-      console.log('headerData.headerFile', headerData.headerFile);
+      console.log('headerData.headerFile', headerData.headerFile)
 
       const file_url = headerData.headerFile
-        ? await uploadFile(headerData.headerFile, `E-Trainings/videos/${headerData.headerFile.name}`)
-        : null;
+        ? await uploadFile(
+            headerData.headerFile,
+            `E-Trainings/videos/${headerData.headerFile.name}`,
+          )
+        : null
 
-      console.log('file_url', file_url);
+      console.log('file_url', file_url)
 
       const dataToSubmit = {
         ...headerData,
-        headerFile: file_url
-      };
+        headerFile: file_url,
+      }
 
-      console.log('dataToSubmit', dataToSubmit);
+      console.log('dataToSubmit', dataToSubmit)
 
-      const res = await axios.patch(`http://localhost:5000/api/update-header/${checkHeader._id}`, dataToSubmit, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+      const res = await axios.patch(
+        `http://localhost:5000/api/update-header/${checkHeader._id}`,
+        dataToSubmit,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
 
       if (res.data) {
-        setReRenderUpdate(true);
-        console.log('res.data', res.data);
+        setReRenderUpdate(true)
+        console.log('res.data', res.data)
         setHeaderData({
           Heading_6: '',
           Heading_2_start_text: '',
@@ -119,14 +126,14 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
           leftRectangleLink: '',
           middleRectangleLink: '',
           rightRectangleLink: '',
-          headerFile: ''
-        });
-        setFileURL(null);
+          headerFile: '',
+        })
+        setFileURL(null)
       }
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   return (
     <div className="UpdateHeader">
@@ -135,7 +142,7 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
           <div className="col-12 tm-col-big">
             <div
               style={{
-                padding: '14px'
+                padding: '14px',
               }}
               className="bg-white tm-block h-100"
             >
@@ -145,7 +152,10 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                   <div className="col-xl-7 col-lg-7 col-md-12">
                     <form onSubmit={handleSubmitHeaderData} className="tm-edit-product-form">
                       <div className="input-group mb-3">
-                        <label htmlFor="Heading_6" className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
+                        <label
+                          htmlFor="Heading_6"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                        >
                           Heading 6
                         </label>
                         <input
@@ -158,7 +168,10 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                       </div>
 
                       <div className="input-group mb-3">
-                        <label htmlFor="Heading_2_start_text" className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
+                        <label
+                          htmlFor="Heading_2_start_text"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                        >
                           Heading 2 : texte de départ
                         </label>
                         <input
@@ -170,7 +183,10 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                         />
                       </div>
                       <div className="input-group mb-3">
-                        <label htmlFor="Heading_2_end_text" className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
+                        <label
+                          htmlFor="Heading_2_end_text"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                        >
                           Heading 2 : texte de fin
                         </label>
                         <input
@@ -182,7 +198,10 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                         />
                       </div>
                       <div className="input-group mb-3">
-                        <label htmlFor="ButtonName" className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
+                        <label
+                          htmlFor="ButtonName"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                        >
                           Nom du bouton
                         </label>
                         <input
@@ -195,7 +214,10 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                       </div>
 
                       <div className="input-group mb-3">
-                        <label htmlFor="theLeftRectangle" className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
+                        <label
+                          htmlFor="theLeftRectangle"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                        >
                           Le rectangle de gauche
                         </label>
                         <input
@@ -208,7 +230,10 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                       </div>
 
                       <div className="input-group mb-3">
-                        <label htmlFor="leftRectangleDescription" className="col-xl-4 col-lg-4 col-md-4 col-sm-5 mb-2">
+                        <label
+                          htmlFor="leftRectangleDescription"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 mb-2"
+                        >
                           Description
                         </label>
                         <textarea
@@ -221,7 +246,10 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                       </div>
 
                       <div className="input-group mb-3">
-                        <label htmlFor="leftRectangleLink" className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
+                        <label
+                          htmlFor="leftRectangleLink"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                        >
                           Nom du Lien
                         </label>
                         <input
@@ -234,7 +262,10 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                       </div>
 
                       <div className="input-group mb-3">
-                        <label htmlFor="theMiddleRectangle" className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
+                        <label
+                          htmlFor="theMiddleRectangle"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                        >
                           Le rectangle du milieu
                         </label>
                         <input
@@ -247,7 +278,10 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                       </div>
 
                       <div className="input-group mb-3">
-                        <label htmlFor="middleRectangleDescription" className="col-xl-4 col-lg-4 col-md-4 col-sm-5 mb-2">
+                        <label
+                          htmlFor="middleRectangleDescription"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 mb-2"
+                        >
                           Description
                         </label>
                         <textarea
@@ -260,7 +294,10 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                       </div>
 
                       <div className="input-group mb-3">
-                        <label htmlFor="middleRectangleLink" className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
+                        <label
+                          htmlFor="middleRectangleLink"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                        >
                           Nom du Lien
                         </label>
                         <input
@@ -273,7 +310,10 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                       </div>
 
                       <div className="input-group mb-3">
-                        <label htmlFor="theRightRectangle" className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
+                        <label
+                          htmlFor="theRightRectangle"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                        >
                           Le rectangle de droite
                         </label>
                         <input
@@ -285,7 +325,10 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                         />
                       </div>
                       <div className="input-group mb-3">
-                        <label htmlFor="rightRectangleDescription" className="col-xl-4 col-lg-4 col-md-4 col-sm-5 mb-2">
+                        <label
+                          htmlFor="rightRectangleDescription"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 mb-2"
+                        >
                           Description
                         </label>
                         <textarea
@@ -298,7 +341,10 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                       </div>
 
                       <div className="input-group mb-3">
-                        <label htmlFor="rightRectangleLink" className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
+                        <label
+                          htmlFor="rightRectangleLink"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                        >
                           Nom du Lien
                         </label>
                         <input
@@ -324,7 +370,7 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                       {fileURL || checkHeader?.headerFile ? (
                         <video
                           style={{
-                            width: '100%'
+                            width: '100%',
                           }}
                           autoPlay
                           muted
@@ -345,7 +391,12 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
                         onChange={handleChangeHeaderFile}
                         style={{ display: 'none' }}
                       />
-                      <input type="button" className="btn btn-primary d-block mx-auto" value="Upload ..." onClick={handleClickHeaderFile} />
+                      <input
+                        type="button"
+                        className="btn btn-primary d-block mx-auto"
+                        value="Upload ..."
+                        onClick={handleClickHeaderFile}
+                      />
                     </div>
                   </div>
                 </div>
@@ -355,7 +406,7 @@ const UpdateHeader = ({ checkHeader, setReRender }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UpdateHeader;
+export default UpdateHeader
