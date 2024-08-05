@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import axios from 'axios'
-import { storage } from '../../config/firebaseConfig'
+// import { storage } from '../../config/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 const UpdateHeader = ({ checkHeader, setReRender }) => {
