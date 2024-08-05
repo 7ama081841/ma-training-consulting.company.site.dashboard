@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import Axios from 'axios'
-// import '../../assets/styles/E-Trainings.css'
-import { storage } from '../../config/firebaseConfig'
+import '../../assets/styles/E-Trainings.css'
+// import { storage } from '../../config/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 const Header = ({ setReRender }) => {
