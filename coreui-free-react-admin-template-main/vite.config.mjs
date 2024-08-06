@@ -55,7 +55,7 @@ import autoprefixer from 'autoprefixer'
 
 export default defineConfig(() => {
   return {
-    base: '/ma-training-consulting.company.site.dashboard/',
+    base: './',
     build: {
       outDir: 'build',
     },
