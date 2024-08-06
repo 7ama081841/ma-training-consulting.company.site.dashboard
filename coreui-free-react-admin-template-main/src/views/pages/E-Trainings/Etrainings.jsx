@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-// import UpdateHeader from '../../../components/E-Trainings/UpdateHeader'
+import UpdateHeader from '../../../components/E-Trainings/UpdateHeader'
 import Header from '../../../components/E-Trainings/Header'
 
 const Etrainings = () => {
@@ -29,21 +29,24 @@ const Etrainings = () => {
     chackHeaderData()
   }, [])
 
-  useEffect(() => {
-    if (reRender) {
-      setReRender(false)
-      chackHeaderData()
-    }
-  }, [reRender])
+  // useEffect(() => {
+  //   if (reRender) {
+  //     setReRender(false)
+  //   }
+  //   chackHeaderData()
+  // }, [reRender])
 
   return (
     <div className="Etrainings">
-      {/*check.header.length > 0 ? (
-        <UpdateHeader checkHeader={check.header[0]} setReRender={setReRender} />
+      {check.header.length > 0 ? (
+        <UpdateHeader
+          checkHeader={check.header[0]}
+          setReRender={setReRender}
+          chackHeaderData={chackHeaderData}
+        />
       ) : (
         <Header setReRender={setReRender} />
-      )*/}
-      <Header />
+      )}
     </div>
   )
 }
