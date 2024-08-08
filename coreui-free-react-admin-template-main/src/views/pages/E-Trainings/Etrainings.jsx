@@ -15,7 +15,10 @@ const Etrainings = () => {
   const chackHeaderData = async () => {
     console.log('chackHeaderData te5dem')
     try {
-      const res = await axios.get('http://localhost:5000/api/get-Header')
+      const res = await axios.get(
+        // 'http://localhost:5000/api/get-Header'
+        'https://ma-training-consulting-company-site-backend.vercel.app/api/get-Header',
+      )
 
       if (res.data) {
         setcheck((prevCheck) => ({
@@ -32,7 +35,10 @@ const Etrainings = () => {
   const chackClass2Data = async () => {
     console.log('chackClass2Data te5dem')
     try {
-      const res = await axios.get('http://localhost:5000/api/get-class-2')
+      const res = await axios.get(
+        // 'http://localhost:5000/api/get-class-2'
+        'https://ma-training-consulting-company-site-backend.vercel.app/api/get-class-2',
+      )
 
       if (res.data) {
         setcheck((prevCheck) => ({

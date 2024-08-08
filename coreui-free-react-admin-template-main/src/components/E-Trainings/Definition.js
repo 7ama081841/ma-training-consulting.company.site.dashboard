@@ -42,11 +42,16 @@ const Definition = ({ chackClass2Data }) => {
         video_cover: video_cover_url,
       }
 
-      const res = await axios.post('http://localhost:5000/api/add-class-2', dataToSubmit, {
-        headers: {
-          'Content-Type': 'application/json',
+      const res = await axios.post(
+        // 'http://localhost:5000/api/add-class-2'
+        'https://ma-training-consulting-company-site-backend.vercel.app/api/add-class-2',
+        dataToSubmit,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      )
 
       if (res.data) {
         console.log('res.data', res.data)
