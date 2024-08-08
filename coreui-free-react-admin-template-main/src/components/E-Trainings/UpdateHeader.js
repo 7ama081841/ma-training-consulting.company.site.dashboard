@@ -1,25 +1,25 @@
 import React, { useRef, useState, useEffect } from 'react'
-import Axios from 'axios'
-import '../../assets/styles/E-Trainings.css'
-// import { storage } from '../../config/firebaseConfig'
+import axios from 'axios'
+import { storage } from '../../config/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
-const Header = ({ setReRender }) => {
+const UpdateHeader = ({ checkHeader, chackHeaderData }) => {
+  const [reRenderUpdate, setReRenderUpdate] = useState(false)
   const [headerData, setHeaderData] = useState({
-    Heading_6: '',
-    Heading_2_start_text: '',
-    Heading_2_end_text: '',
-    ButtonName: '',
-    theLeftRectangle: '',
-    theMiddleRectangle: '',
-    theRightRectangle: '',
-    leftRectangleDescription: '',
-    middleRectangleDescription: '',
-    rightRectangleDescription: '',
-    leftRectangleLink: '',
-    middleRectangleLink: '',
-    rightRectangleLink: '',
-    headerFile: null,
+    Heading_6: checkHeader?.Heading_6,
+    Heading_2_start_text: checkHeader?.Heading_2_start_text,
+    Heading_2_end_text: checkHeader?.Heading_2_end_text,
+    ButtonName: checkHeader?.ButtonName,
+    theLeftRectangle: checkHeader?.theLeftRectangle,
+    theMiddleRectangle: checkHeader?.theMiddleRectangle,
+    theRightRectangle: checkHeader?.theRightRectangle,
+    leftRectangleDescription: checkHeader?.leftRectangleDescription,
+    middleRectangleDescription: checkHeader?.middleRectangleDescription,
+    rightRectangleDescription: checkHeader?.rightRectangleDescription,
+    leftRectangleLink: checkHeader?.leftRectangleLink,
+    middleRectangleLink: checkHeader?.middleRectangleLink,
+    rightRectangleLink: checkHeader?.rightRectangleLink,
+    headerFile: checkHeader?.headerFile,
   })
 
   const headerfileRef = useRef(null)
@@ -32,6 +32,12 @@ const Header = ({ setReRender }) => {
       }
     }
   }, [fileURL])
+
+  useEffect(() => {
+    if (reRenderUpdate === true) {
+      setReRenderUpdate(false)
+    }
+  }, [reRenderUpdate])
 
   const handleChangeHeaderFile = (e) => {
     if (fileURL) {
@@ -82,41 +88,45 @@ const Header = ({ setReRender }) => {
         headerFile: file_url,
       }
 
-      const res = await Axios.post('http://localhost:5000/api/add-header', dataToSubmit, {
-        headers: {
-          'Content-Type': 'application/json',
+      const res = await axios.patch(
+        `http://localhost:5000/api/update-header/${checkHeader._id}`,
+        dataToSubmit,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      )
 
       if (res.data) {
-        setReRender(true)
+        setReRenderUpdate(true)
+
+        setHeaderData({
+          Heading_6: '',
+          Heading_2_start_text: '',
+          Heading_2_end_text: '',
+          ButtonName: '',
+          theLeftRectangle: '',
+          theMiddleRectangle: '',
+          theRightRectangle: '',
+          leftRectangleDescription: '',
+          middleRectangleDescription: '',
+          rightRectangleDescription: '',
+          leftRectangleLink: '',
+          middleRectangleLink: '',
+          rightRectangleLink: '',
+          headerFile: '',
+        })
+        setFileURL(null)
+        chackHeaderData()
       }
     } catch (error) {
-      console.error('Error during data submission:', error)
+      console.error(error)
     }
-
-    setHeaderData({
-      Heading_6: '',
-      Heading_2_start_text: '',
-      Heading_2_end_text: '',
-      ButtonName: '',
-      theLeftRectangle: '',
-      theMiddleRectangle: '',
-      theRightRectangle: '',
-      leftRectangleDescription: '',
-      middleRectangleDescription: '',
-      rightRectangleDescription: '',
-      leftRectangleLink: '',
-      middleRectangleLink: '',
-      rightRectangleLink: '',
-      headerFile: null,
-    })
-    setFileURL(null)
-    setReRender(true)
   }
 
   return (
-    <div className="Header">
+    <div className="UpdateHeader">
       <div className="container">
         <div className="row tm-content-row tm-mt-big">
           <div className="col-12 tm-col-big">
@@ -124,9 +134,9 @@ const Header = ({ setReRender }) => {
               style={{
                 padding: '14px',
               }}
-              className="tm-block h-100"
+              className=" tm-block h-100"
             >
-              <h2 className="tm-block-title text-white "> Class 1 </h2>
+              <h2 className="tm-block-title">Class 1</h2>
               <div className="header">
                 <div className="row mt-4 tm-edit-product-row w-100">
                   <div className="col-xl-7 col-lg-7 col-md-12">
@@ -299,7 +309,7 @@ const Header = ({ setReRender }) => {
                         <hr />
                       </div>
 
-                      <div className="parti 2">
+                      <div className="parti 3">
                         <p className="text-center">parti 3</p>
                         <div className="input-group mb-3">
                           <label
@@ -316,7 +326,6 @@ const Header = ({ setReRender }) => {
                             className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
                           />
                         </div>
-
                         <div className="input-group mb-3">
                           <label
                             htmlFor="rightRectangleDescription"
@@ -351,43 +360,39 @@ const Header = ({ setReRender }) => {
                         <hr />
                       </div>
 
-                      <div className="input-group mb-3 d-flex justify-content-center ">
-                        <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0 text-center">
+                      <div className="input-group mb-3 d-flex justify-content-center">
+                        <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0  text-center">
                           <button type="submit" className="btn btn-primary">
-                            Ajouter
+                            modifier
                           </button>
                         </div>
                       </div>
                     </form>
                   </div>
                   <div className="col-xl-4 col-lg-4 col-md-12 mx-auto mb-4 text-center">
-                    <div
-                      style={{
-                        textAlign: 'center',
-                      }}
-                      className="tm-product-img-dummy mx-auto"
-                    ></div>
-                    {fileURL ? (
-                      <video
-                        style={{
-                          width: '100%',
-                        }}
-                        autoPlay
-                        muted
-                        loop
-                        id="bg-video"
-                        src={fileURL}
-                        type="video/mp4"
-                      ></video>
-                    ) : (
-                      <i
-                        style={{
-                          border: '.5px solid',
-                          padding: '35px',
-                        }}
-                        className="fas fa-5x fa-cloud-upload-alt"
-                      ></i>
-                    )}
+                    <div className="tm-product-img-dummy mx-auto">
+                      {fileURL || checkHeader?.headerFile ? (
+                        <video
+                          style={{
+                            width: '100%',
+                          }}
+                          autoPlay
+                          muted
+                          loop
+                          id="bg-video"
+                          src={fileURL ? fileURL : checkHeader.headerFile}
+                          type="video/mp4"
+                        ></video>
+                      ) : (
+                        <i
+                          style={{
+                            border: '.5px solid',
+                            padding: '36px',
+                          }}
+                          className="fas fa-5x fa-cloud-upload-alt"
+                        ></i>
+                      )}
+                    </div>
                     <div className="custom-file mt-3 mb-3">
                       <input
                         ref={headerfileRef}
@@ -414,4 +419,4 @@ const Header = ({ setReRender }) => {
   )
 }
 
-export default Header
+export default UpdateHeader
