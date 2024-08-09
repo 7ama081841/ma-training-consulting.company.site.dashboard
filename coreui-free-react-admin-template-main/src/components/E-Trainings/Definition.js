@@ -48,8 +48,8 @@ const Definition = ({ chackClass2Data, setReRender }) => {
       }
 
       const res = await axios.post(
-        'http://localhost:5000/api/add-class-2',
-        // 'https://ma-training-consulting-company-site-backend.vercel.app/api/add-class-2',
+        // 'http://localhost:5000/api/add-class-2',
+        'https://ma-training-consulting-company-site-backend.vercel.app/api/add-class-2',
         dataToSubmit,
         {
           headers: {

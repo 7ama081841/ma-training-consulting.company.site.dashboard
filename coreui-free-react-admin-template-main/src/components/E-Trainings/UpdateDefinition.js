@@ -73,8 +73,8 @@ const UpdateDefinition = ({ checkClass_2 }) => {
       }
 
       const res = await axios.patch(
-        `http://localhost:5000/api/update-class-2/${checkClass_2._id}`,
-        // `https://ma-training-consulting-company-site-backend.vercel.app/api/update-class-2/${checkClass_2._id}`,
+        // `http://localhost:5000/api/update-class-2/${checkClass_2._id}`,
+        `https://ma-training-consulting-company-site-backend.vercel.app/api/update-class-2/${checkClass_2._id}`,
         dataToSubmit,
         {
           headers: {
