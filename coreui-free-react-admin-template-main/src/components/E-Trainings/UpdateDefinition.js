@@ -2,27 +2,56 @@ import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { storage } from '../../config/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { CButton } from '@coreui/react'
 
-const UpdateDefinition = ({ checkClass_2, chackClass2Data }) => {
-  console.log('checkClass_2', checkClass_2)
+const UpdateDefinition = ({ checkClass_2 }) => {
   const [fileURL, setFileURL] = useState(null)
-  const [definitionData, setDefinitionData] = useState({
-    great_text: checkClass_2?.great_text,
-    mini_paragraph: checkClass_2?.mini_paragraph,
-    Advantages_1_Title: checkClass_2?.Advantages_1_Title,
-    Advantages_1_text: checkClass_2?.Advantages_1_text,
-    Advantages_2_Title: checkClass_2?.Advantages_2_Title,
-    Advantages_2_text: checkClass_2?.Advantages_2_text,
-    Advantages_3_Title: checkClass_2?.Advantages_3_Title,
-    Advantages_3_text: checkClass_2?.Advantages_3_text,
-    video_link: checkClass_2?.video_link,
-    video_cover: checkClass_2?.video_cover,
+  const [definitionData, setDefinitionData] = useState({})
+  const [statistiques, setStatistiques] = useState({
+    statisticsNumber: null,
+    statisticsName: '',
   })
+
+  useEffect(() => {
+    setDefinitionData(checkClass_2)
+  }, [])
+
+  const handleAddStatistique = (newStatistique) => {
+    if (newStatistique.statisticsNumber === '' || newStatistique.statisticsName === '') {
+      return
+    }
+
+    setDefinitionData((prevState) => ({
+      ...prevState,
+      statistiques: [...prevState.statistiques, newStatistique],
+    }))
+
+    setStatistiques((prevState) => ({
+      ...prevState,
+      statisticsNumber: '',
+      statisticsName: '',
+    }))
+  }
+
+  const handleDeleteStatistiqueByIndex = (indexToDelete) => {
+    setDefinitionData((prevState) => ({
+      ...prevState,
+      statistiques: prevState.statistiques.filter((_, index) => index !== indexToDelete),
+    }))
+  }
+
+  const handleChangeStatistiques = (e) => {
+    const { name, value } = e.target
+
+    setStatistiques((prevState) => ({
+      ...prevState,
+      [name]: name === 'statisticsNumber' ? (isNaN(value) ? '' : Number(value)) : value,
+    }))
+  }
 
   const handleSubmitDefinitionData = async (e) => {
     e.preventDefault()
 
-    console.log('definitionData', definitionData)
     try {
       // Upload files to Firebase Storage
       const uploadFile = async (file, filePath) => {
@@ -43,9 +72,9 @@ const UpdateDefinition = ({ checkClass_2, chackClass2Data }) => {
         video_cover: video_cover_url,
       }
 
-      const res = await axios.post(
-        // `http://localhost:5000/api//update-class-2/${checkClass_2._id}`,
-        `https://ma-training-consulting-company-site-backend.vercel.app/api//update-class-2/${checkClass_2._id}`,
+      const res = await axios.patch(
+        `http://localhost:5000/api/update-class-2/${checkClass_2._id}`,
+        // `https://ma-training-consulting-company-site-backend.vercel.app/api/update-class-2/${checkClass_2._id}`,
         dataToSubmit,
         {
           headers: {
@@ -55,8 +84,6 @@ const UpdateDefinition = ({ checkClass_2, chackClass2Data }) => {
       )
 
       if (res.data) {
-        console.log('res.data', res.data)
-
         setDefinitionData({
           great_text: '',
           mini_paragraph: '',
@@ -72,7 +99,8 @@ const UpdateDefinition = ({ checkClass_2, chackClass2Data }) => {
 
         setFileURL(null)
 
-        chackClass2Data()
+        // chackClass2Data()
+        location.reload()
       }
     } catch (error) {
       console.log(error)
@@ -294,10 +322,100 @@ const UpdateDefinition = ({ checkClass_2, chackClass2Data }) => {
                         />
                       </div>
 
+                      {/* ------------------------ test ------------------------ */}
+                      <div>
+                        <p className="text-center">Statistiques</p>
+                        <div className="input-group mb-3">
+                          <label
+                            htmlFor="numéro Statistique"
+                            className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                          >
+                            numéro Statistique
+                          </label>
+                          <input
+                            name="statisticsNumber"
+                            onChange={handleChangeStatistiques}
+                            type="text"
+                            value={statistiques.statisticsNumber}
+                            className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
+                          />
+                        </div>
+                        <div className="input-group mb-3">
+                          <label
+                            htmlFor="statisticsName"
+                            className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                          >
+                            nom des Statistiques
+                          </label>
+                          <input
+                            name="statisticsName"
+                            onChange={handleChangeStatistiques}
+                            type="text"
+                            value={statistiques.statisticsName}
+                            className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
+                          />
+                        </div>
+                        <input
+                          type="button"
+                          className="btn btn-primary d-block my-4 mx-auto"
+                          value="Ajouter Une Suggestion"
+                          onClick={() => handleAddStatistique(statistiques)}
+                        />
+                        {definitionData?.statistiques?.length > 0 &&
+                          definitionData.statistiques.map((item, index) => (
+                            <div key={index}>
+                              <p className="text-center"> Statistiques {index + 1} </p>
+                              <div className="input-group mb-3">
+                                <label
+                                  htmlFor="numéro Statistique"
+                                  className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                                >
+                                  numéro Statistique
+                                </label>
+                                <span
+                                  // className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
+                                  style={{
+                                    lineHeight: '2.5',
+                                  }}
+                                >
+                                  {' '}
+                                  {item.statisticsNumber}{' '}
+                                </span>
+                              </div>
+                              <div className="input-group mb-3">
+                                <label
+                                  htmlFor="statisticsName"
+                                  className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                                >
+                                  nom des Statistiques
+                                </label>
+                                <span
+                                  // className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
+                                  style={{
+                                    lineHeight: '2.5',
+                                  }}
+                                >
+                                  {' '}
+                                  {item.statisticsName}{' '}
+                                </span>
+                              </div>
+                              <CButton
+                                onClick={() => handleDeleteStatistiqueByIndex(index)}
+                                color="danger"
+                                variant="outline"
+                              >
+                                supprimer
+                              </CButton>
+                            </div>
+                          ))}
+                        <hr />
+                      </div>
+                      {/* ------------------------ test ------------------------ */}
+
                       <div className="input-group mb-3 d-flex justify-content-center">
                         <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0 text-center">
                           <button type="submit" className="btn btn-primary">
-                            Ajouter
+                            modifier
                           </button>
                         </div>
                       </div>

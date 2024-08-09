@@ -13,7 +13,6 @@ const Etrainings = () => {
   })
 
   const chackHeaderData = async () => {
-    console.log('chackHeaderData te5dem')
     try {
       const res = await axios.get(
         // 'http://localhost:5000/api/get-Header'
@@ -33,7 +32,6 @@ const Etrainings = () => {
   }
 
   const chackClass2Data = async () => {
-    console.log('chackClass2Data te5dem')
     try {
       const res = await axios.get(
         // 'http://localhost:5000/api/get-class-2'
@@ -58,11 +56,6 @@ const Etrainings = () => {
   }, [])
 
   useEffect(() => {
-    console.log('class 1', check.header)
-    console.log('class 2', check.class_2)
-  }, [check])
-
-  useEffect(() => {
     if (reRender) {
       setReRender(false)
     }
@@ -76,9 +69,9 @@ const Etrainings = () => {
         <Header setReRender={setReRender} />
       )}
       {check.class_2.length > 0 ? (
-        <UpdateDefinition checkClass_2={check.class_2[0]} chackClass2Data={chackClass2Data} />
+        <UpdateDefinition checkClass_2={check.class_2[0]} />
       ) : (
-        <Definition chackClass2Data={chackClass2Data} />
+        <Definition chackClass2Data={chackClass2Data} setReRender={setReRender} />
       )}
     </div>
   )

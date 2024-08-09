@@ -94,7 +94,8 @@ const Header = ({ setReRender }) => {
       )
 
       if (res.data) {
-        setReRender(true)
+        // setReRender(true)
+        location.reload()
       }
     } catch (error) {
       console.error('Error during data submission:', error)

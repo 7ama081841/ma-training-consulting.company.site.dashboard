@@ -100,7 +100,7 @@ const UpdateHeader = ({ checkHeader, chackHeaderData }) => {
       )
 
       if (res.data) {
-        setReRenderUpdate(true)
+        // setReRenderUpdate(true)
 
         setHeaderData({
           Heading_6: '',
@@ -119,7 +119,7 @@ const UpdateHeader = ({ checkHeader, chackHeaderData }) => {
           headerFile: '',
         })
         setFileURL(null)
-        chackHeaderData()
+        location.reload()
       }
     } catch (error) {
       console.error(error)
