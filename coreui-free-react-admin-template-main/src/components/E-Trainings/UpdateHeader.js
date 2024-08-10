@@ -84,7 +84,7 @@ const UpdateHeader = ({ checkHeader, chackHeaderData }) => {
         ? await uploadFile(
             headerData.headerFile,
             `E-Trainings/videos/${headerData.headerFile.name}`,
-          )
+          // )
         : null
 
       const dataToSubmit = {
@@ -93,8 +93,8 @@ const UpdateHeader = ({ checkHeader, chackHeaderData }) => {
       }
 
       const res = await axios.patch(
-        `http://localhost:5000/api/update-header/${checkHeader._id}`,
-        // `https://ma-training-consulting-company-site-backend.vercel.app/api/update-header/${checkHeader._id}`,
+        // `http://localhost:5000/api/update-header/${checkHeader._id}`,
+        `https://ma-training-consulting-company-site-backend.vercel.app/api/update-header/${checkHeader._id}`,
         dataToSubmit,
         {
           headers: {
