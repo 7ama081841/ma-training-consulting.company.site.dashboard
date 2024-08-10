@@ -4,6 +4,7 @@ import UpdateHeader from '../../../components/E-Trainings/UpdateHeader.js'
 import Header from '../../../components/E-Trainings/Header.js'
 import Definition from '../../../components/E-Trainings/Definition.js'
 import UpdateDefinition from '../../../components/E-Trainings/UpdateDefinition.js'
+import Avantage from '../../../components/E-Trainings/Avantage.js'
 
 const Etrainings = () => {
   const [reRender, setReRender] = useState(false)
@@ -73,6 +74,7 @@ const Etrainings = () => {
       ) : (
         <Definition chackClass2Data={chackClass2Data} setReRender={setReRender} />
       )}
+      <Avantage setReRender={setReRender} />
     </div>
   )
 }

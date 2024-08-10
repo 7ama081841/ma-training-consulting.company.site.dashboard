@@ -84,7 +84,7 @@ const UpdateHeader = ({ checkHeader, chackHeaderData }) => {
         ? await uploadFile(
             headerData.headerFile,
             `E-Trainings/videos/${headerData.headerFile.name}`,
-          // )
+          )
         : null
 
       const dataToSubmit = {
@@ -321,7 +321,7 @@ const UpdateHeader = ({ checkHeader, chackHeaderData }) => {
                             htmlFor="theRightRectangle"
                             className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
                           >
-                            Le rectangle de droite
+                            titre
                           </label>
                           <input
                             name="theRightRectangle"

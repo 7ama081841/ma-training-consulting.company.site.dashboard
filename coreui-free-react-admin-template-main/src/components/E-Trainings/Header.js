@@ -132,7 +132,7 @@ const Header = ({ setReRender }) => {
               }}
               className="tm-block h-100"
             >
-              <h2 className="tm-block-title text-white "> Class 1 </h2>
+              <h2 className="tm-block-title"> Class 1 </h2>
               <div className="header">
                 <div className="row mt-4 tm-edit-product-row w-100">
                   <div className="col-xl-7 col-lg-7 col-md-12">
@@ -312,7 +312,7 @@ const Header = ({ setReRender }) => {
                             htmlFor="theRightRectangle"
                             className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
                           >
-                            Le rectangle de droite
+                            titre
                           </label>
                           <input
                             name="theRightRectangle"
