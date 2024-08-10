@@ -34,6 +34,10 @@ const UpdateHeader = ({ checkHeader, chackHeaderData }) => {
   }, [fileURL])
 
   useEffect(() => {
+    setHeaderData(checkHeader)
+  }, [])
+
+  useEffect(() => {
     if (reRenderUpdate === true) {
       setReRenderUpdate(false)
     }
@@ -85,12 +89,12 @@ const UpdateHeader = ({ checkHeader, chackHeaderData }) => {
 
       const dataToSubmit = {
         ...headerData,
-        headerFile: file_url,
+        headerFile: !fileURL ? headerData.headerFile : file_url,
       }
 
       const res = await axios.patch(
-        // `http://localhost:5000/api/update-header/${checkHeader._id}`,
-        `https://ma-training-consulting-company-site-backend.vercel.app/api/update-header/${checkHeader._id}`,
+        `http://localhost:5000/api/update-header/${checkHeader._id}`,
+        // `https://ma-training-consulting-company-site-backend.vercel.app/api/update-header/${checkHeader._id}`,
         dataToSubmit,
         {
           headers: {

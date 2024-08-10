@@ -69,7 +69,7 @@ const UpdateDefinition = ({ checkClass_2 }) => {
 
       const dataToSubmit = {
         ...definitionData,
-        video_cover: video_cover_url,
+        video_cover: !fileURL ? definitionData.video_cover : video_cover_url,
       }
 
       const res = await axios.patch(
