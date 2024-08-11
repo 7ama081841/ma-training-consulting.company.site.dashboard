@@ -4,26 +4,14 @@ import '../../assets/styles/E-Trainings.css'
 import { storage } from '../../config/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
-const Avantage = ({ setReRender }) => {
-  const [avantageData, setAvantageData] = useState({
-    grand_grand: '',
-    titre_parti_1_gauche: '',
-    description_parti_1_gauche: '',
-    titre_parti_2_gauche: '',
-    description_parti_2_gauche: '',
-    titre_parti_3_gauche: '',
-    description_parti_3_gauche: '',
-    titre_parti_1_droite: '',
-    description_parti_1_droite: '',
-    titre_parti_2_droite: '',
-    description_parti_2_droite: '',
-    titre_parti_3_droite: '',
-    description_parti_3_droite: '',
-    avantage_image: '',
-  })
-
+const UpdateAvantage = ({ checkClass_3 }) => {
+  const [avantageData, setAvantageData] = useState({})
   const avantage_imageRef = useRef(null)
   const [fileURL, setFileURL] = useState(null)
+
+  useEffect(() => {
+    setAvantageData(checkClass_3)
+  }, [])
 
   useEffect(() => {
     return () => {
@@ -79,12 +67,12 @@ const Avantage = ({ setReRender }) => {
 
       const dataToSubmit = {
         ...avantageData,
-        avantage_image: file_url,
+        avantage_image: !fileURL ? avantageData.avantage_image : file_url,
       }
 
-      const res = await Axios.post(
-        // 'http://localhost:5000/api/add-class-3',
-        'https://ma-training-consulting-company-site-backend.vercel.app/api/add-class-3',
+      const res = await Axios.patch(
+        // `http://localhost:5000/api/update-class-3/${checkClass_3._id}`,
+        `https://ma-training-consulting-company-site-backend.vercel.app/api/update-class-3/${checkClass_3._id}`,
         dataToSubmit,
         {
           headers: {
@@ -95,30 +83,29 @@ const Avantage = ({ setReRender }) => {
 
       if (res.data) {
         // setReRender(true)
+
+        setAvantageData({
+          grand_grand: '',
+          titre_parti_1_gauche: '',
+          description_parti_1_gauche: '',
+          titre_parti_2_gauche: '',
+          description_parti_2_gauche: '',
+          titre_parti_3_gauche: '',
+          description_parti_3_gauche: '',
+          titre_parti_1_droite: '',
+          description_parti_1_droite: '',
+          titre_parti_2_droite: '',
+          description_parti_2_droite: '',
+          titre_parti_3_droite: '',
+          description_parti_3_droite: '',
+          avantage_image: '',
+        })
+        setFileURL(null)
         location.reload()
       }
     } catch (error) {
       console.error('Error during data submission:', error)
     }
-
-    setAvantageData({
-      grand_grand: '',
-      titre_parti_1_gauche: '',
-      description_parti_1_gauche: '',
-      titre_parti_2_gauche: '',
-      description_parti_2_gauche: '',
-      titre_parti_3_gauche: '',
-      description_parti_3_gauche: '',
-      titre_parti_1_droite: '',
-      description_parti_1_droite: '',
-      titre_parti_2_droite: '',
-      description_parti_2_droite: '',
-      titre_parti_3_droite: '',
-      description_parti_3_droite: '',
-      avantage_image: '',
-    })
-    setFileURL(null)
-    setReRender(true)
   }
 
   return (
@@ -516,13 +503,13 @@ const Avantage = ({ setReRender }) => {
                       }}
                       className="tm-product-img-dummy mx-auto"
                     ></div>
-                    {fileURL ? (
+                    {fileURL || avantageData?.avantage_image ? (
                       <img
                         style={{
                           width: '100%',
                         }}
                         id="bg-video"
-                        src={fileURL}
+                        src={fileURL ? fileURL : avantageData?.avantage_image}
                       />
                     ) : (
                       <i
@@ -559,4 +546,4 @@ const Avantage = ({ setReRender }) => {
   )
 }
 
-export default Avantage
+export default UpdateAvantage
