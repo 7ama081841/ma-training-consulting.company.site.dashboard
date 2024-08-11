@@ -56,8 +56,8 @@ const Etrainings = () => {
   const chackClass3Data = async () => {
     try {
       const res = await axios.get(
-        'http://localhost:5000/api/get-class-3',
-        // 'https://ma-training-consulting-company-site-backend.vercel.app/api/get-class-2',
+        // 'http://localhost:5000/api/get-class-3',
+        'https://ma-training-consulting-company-site-backend.vercel.app/api/get-class-3',
       )
 
       if (res.data) {
