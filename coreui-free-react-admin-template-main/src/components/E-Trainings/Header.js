@@ -184,22 +184,6 @@ const Header = ({ setReRender }) => {
                         />
                       </div>
 
-                      {/* <div className="input-group mb-3">
-                        <label
-                          htmlFor="ButtonName"
-                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
-                        >
-                          Nom du bouton
-                        </label>
-                        <input
-                          name="ButtonName"
-                          onChange={handleChangeHeaderData}
-                          type="text"
-                          value={headerData.ButtonName}
-                          className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
-                        />
-                      </div>*/}
-
                       <div className="parti 1">
                         <p className="text-center">parti 1</p>
 

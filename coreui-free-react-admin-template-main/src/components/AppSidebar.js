@@ -24,6 +24,9 @@ const AppSidebar = () => {
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
 
+  console.log('unfoldable', unfoldable)
+  console.log('sidebarShow', sidebarShow)
+
   return (
     <CSidebar
       className="border-end"
