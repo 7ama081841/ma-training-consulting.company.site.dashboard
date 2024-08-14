@@ -9,10 +9,13 @@ import UpdateAvantage from '../../../components/E-Trainings/UpdateAvantage.js'
 
 import { CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
 import AddCoursPayant from '../../../components/cours/AddCoursPayant.js'
+import UpdateCoursPayant from '../../../components/cours/UpdateCoursPayant.js'
 
 const Etrainings = () => {
   const [reRender, setReRender] = useState(false)
   const [visible, setVisible] = useState(false)
+  const [updateCoursVisible, setUpdateCoursVisible] = useState(false)
+  const [coursId, setCoursId] = useState(null)
   const [categories, setCategories] = useState([])
   const [coursPayant, setCoursPayant] = useState([])
 
@@ -22,8 +25,19 @@ const Etrainings = () => {
     class_3: [],
   })
 
+  useEffect(() => {
+    console.log('coursId', coursId)
+  }, [coursId])
+
   const handleShow = () => setVisible(true)
   const handleClose = () => setVisible(false)
+
+  const handleUpdateCoursShow = (id) => {
+    setCoursId(id)
+    setUpdateCoursVisible(true)
+  }
+
+  const handleUpdateCoursClose = () => setUpdateCoursVisible(false)
 
   const chackHeaderData = async () => {
     try {
@@ -206,6 +220,16 @@ const Etrainings = () => {
                     <td>2018-10-28</td>
                     <td>
                       <i
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handleUpdateCoursShow(item._id)}
+                        className="mx-3 fas fa-pen-alt tm-pen-icon"
+                      ></i>
+                      <i
+                        style={{
+                          cursor: 'pointer',
+                        }}
                         onClick={() => handledeleteCoursPayant(item._id)}
                         className="fas fa-trash-alt tm-trash-icon"
                       ></i>
@@ -218,13 +242,25 @@ const Etrainings = () => {
         </div>
       </div>
 
-      {/*<CoursPayant />*/}
       <CModal visible={visible} onClose={handleClose} size="lg">
         <CModalHeader closeButton>
           <CModalTitle>formation payant</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <AddCoursPayant handleClose={handleClose} categorys={categories} />
+        </CModalBody>
+      </CModal>
+
+      <CModal visible={updateCoursVisible} onClose={handleUpdateCoursClose} size="lg">
+        <CModalHeader closeButton>
+          <CModalTitle>modifier formation payant</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <UpdateCoursPayant
+            handleUpdateCoursClose={handleUpdateCoursClose}
+            categorys={categories}
+            coursId={coursId}
+          />
         </CModalBody>
       </CModal>
     </div>
