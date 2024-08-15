@@ -4,7 +4,7 @@ import { storage } from '../../config/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { CButton } from '@coreui/react'
 
-const Definition = ({ chackClass2Data, setReRender }) => {
+const Definition = () => {
   const [fileURL, setFileURL] = useState(null)
   const [statistiques, setStatistiques] = useState({
     statisticsNumber: null,
@@ -74,7 +74,6 @@ const Definition = ({ chackClass2Data, setReRender }) => {
 
         setFileURL(null)
 
-        // setReRender(true)
         location.reload()
       }
     } catch (error) {
@@ -158,22 +157,6 @@ const Definition = ({ chackClass2Data, setReRender }) => {
                 <div className="row mt-4 tm-edit-product-row w-100">
                   <div className="col-xl-7 col-lg-7 col-md-12">
                     <form onSubmit={handleSubmitDefinitionData} className="tm-edit-product-form">
-                      {/* <div className="input-group mb-3">
-                        <label
-                          htmlFor="heding_6"
-                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
-                        >
-                          Heading 6
-                        </label>
-                        <input
-                          name="heding_6"
-                          onChange={handleChangeDefinitionData}
-                          value={definitionData.heading_6}
-                          type="text"
-                          className="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
-                        />
-                      </div>*/}
-
                       <div className="input-group mb-3">
                         <label
                           htmlFor="great_text"
@@ -435,9 +418,6 @@ const Definition = ({ chackClass2Data, setReRender }) => {
                             width: '100%',
                             height: '100%',
                           }}
-                          autoPlay
-                          muted
-                          loop
                           id="bg-video"
                           src={fileURL}
                           type="video/mp4"

@@ -10,6 +10,7 @@ import UpdateAvantage from '../../../components/E-Trainings/UpdateAvantage.js'
 import { CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
 import AddCoursPayant from '../../../components/cours/AddCoursPayant.js'
 import UpdateCoursPayant from '../../../components/cours/UpdateCoursPayant.js'
+import AddTestimony from '../../../components/E-Trainings/AddTestimony.js'
 
 const Etrainings = () => {
   const [reRender, setReRender] = useState(false)
@@ -24,10 +25,6 @@ const Etrainings = () => {
     class_2: [],
     class_3: [],
   })
-
-  useEffect(() => {
-    console.log('coursId', coursId)
-  }, [coursId])
 
   const handleShow = () => setVisible(true)
   const handleClose = () => setVisible(false)
@@ -160,27 +157,33 @@ const Etrainings = () => {
 
   return (
     <div className="Etrainings">
+      {/* class 1 */}
       {check.header.length > 0 ? (
         <UpdateHeader checkHeader={check.header[0]} chackHeaderData={chackHeaderData} />
       ) : (
         <Header setReRender={setReRender} />
       )}
+
+      {/* class 2 */}
       {check.class_2.length > 0 ? (
         <UpdateDefinition checkClass_2={check.class_2[0]} />
       ) : (
         <Definition chackClass2Data={chackClass2Data} setReRender={setReRender} />
       )}
+
+      {/* class 3 */}
       {check.class_3.length > 0 ? (
         <UpdateAvantage checkClass_3={check.class_3[0]} />
       ) : (
         <Avantage setReRender={setReRender} />
       )}
 
+      {/* class 4 */}
       <div className="col-xl-8 col-lg-12 tm-md-12 tm-sm-12 tm-col my-5">
         <div className="tm-block h-100">
           <div className="row">
             <div className="col-md-8 col-sm-12">
-              <h2 className="tm-block-title d-inline-block">formations Payant</h2>
+              <h2 className="tm-block-title d-inline-block"> Class 4 ( formations Payant )</h2>
             </div>
             <div className="col-md-4 col-sm-12 text-right">
               <button onClick={handleShow} className="btn btn-small btn-primary">
@@ -242,6 +245,10 @@ const Etrainings = () => {
         </div>
       </div>
 
+      {/* class 5 */}
+      <AddTestimony />
+
+      {/* dialog add  ( formations Payant ) */}
       <CModal visible={visible} onClose={handleClose} size="lg">
         <CModalHeader closeButton>
           <CModalTitle>formation payant</CModalTitle>
@@ -251,6 +258,7 @@ const Etrainings = () => {
         </CModalBody>
       </CModal>
 
+      {/* dialog update ( formations Payant ) */}
       <CModal visible={updateCoursVisible} onClose={handleUpdateCoursClose} size="lg">
         <CModalHeader closeButton>
           <CModalTitle>modifier formation payant</CModalTitle>

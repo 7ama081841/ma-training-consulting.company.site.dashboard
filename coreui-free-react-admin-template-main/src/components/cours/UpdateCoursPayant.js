@@ -658,7 +658,7 @@ const UpdateCoursPayant = ({ handleUpdateCoursClose, categorys, coursId }) => {
                       <div className="input-group my-3">
                         <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0">
                           <button type="submit" className="btn btn-primary">
-                            Ajouter
+                            modifier
                           </button>
                         </div>
                       </div>
