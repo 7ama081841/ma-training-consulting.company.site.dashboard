@@ -11,6 +11,8 @@ import { CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
 import AddCoursPayant from '../../../components/cours/AddCoursPayant.js'
 import UpdateCoursPayant from '../../../components/cours/UpdateCoursPayant.js'
 import AddTestimony from '../../../components/E-Trainings/AddTestimony.js'
+import AddPackDeFormation from '../../../components/E-Trainings/AddPackDeFormation.js'
+import UpdatePackDeFormation from '../../../components/E-Trainings/UpdatePackDeFormation.js'
 
 const Etrainings = () => {
   const [reRender, setReRender] = useState(false)
@@ -24,7 +26,12 @@ const Etrainings = () => {
     header: [],
     class_2: [],
     class_3: [],
+    packDeFormation: [],
   })
+
+  useEffect(() => {
+    console.log('check', check)
+  }, [check])
 
   const handleShow = () => setVisible(true)
   const handleClose = () => setVisible(false)
@@ -125,6 +132,27 @@ const Etrainings = () => {
     }
   }
 
+  const getPackDeFormation = async () => {
+    console.log('getPackDeFormation is work ')
+
+    try {
+      const res = await axios.get(
+        // 'http://localhost:5000/api/get-PackDeFormation',
+        'https://ma-training-consulting-company-site-backend.vercel.app/api/get-PackDeFormation',
+      )
+
+      if (res.data) {
+        setcheck((prevCheck) => ({
+          ...prevCheck,
+          packDeFormation: res.data,
+        }))
+        //  dispatch(getcoursPayant(res.data.course))
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const handledeleteCoursPayant = async (id) => {
     try {
       const res = await axios.delete(
@@ -147,6 +175,7 @@ const Etrainings = () => {
     chackClass3Data()
     getCategoriesData()
     getAllCoursPayant()
+    getPackDeFormation()
   }, [])
 
   useEffect(() => {
@@ -179,7 +208,7 @@ const Etrainings = () => {
       )}
 
       {/* class 4 */}
-      <div className="col-xl-8 col-lg-12 tm-md-12 tm-sm-12 tm-col my-5">
+      <div className="col-xl-8 col-lg-12 tm-md-12 tm-sm-12 tm-col mt-5">
         <div className="tm-block h-100">
           <div className="row">
             <div className="col-md-8 col-sm-12">
@@ -248,7 +277,14 @@ const Etrainings = () => {
       {/* class 5 */}
       <AddTestimony />
 
-      {/* dialog add  ( formations Payant ) */}
+      {/* class 6 */}
+      {check.packDeFormation.length > 0 ? (
+        <UpdatePackDeFormation packDeFormation={check.packDeFormation[0]} setcheck={setcheck} />
+      ) : (
+        <AddPackDeFormation getPackDeFormation={getPackDeFormation} />
+      )}
+
+      {/* dialog add  ( formations Payant ) class 4 */}
       <CModal visible={visible} onClose={handleClose} size="lg">
         <CModalHeader closeButton>
           <CModalTitle>formation payant</CModalTitle>
@@ -258,7 +294,7 @@ const Etrainings = () => {
         </CModalBody>
       </CModal>
 
-      {/* dialog update ( formations Payant ) */}
+      {/* dialog update ( formations Payant ) class 4 */}
       <CModal visible={updateCoursVisible} onClose={handleUpdateCoursClose} size="lg">
         <CModalHeader closeButton>
           <CModalTitle>modifier formation payant</CModalTitle>
