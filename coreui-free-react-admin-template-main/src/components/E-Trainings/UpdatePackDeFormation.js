@@ -43,10 +43,6 @@ const UpdatePackDeFormation = ({ packDeFormation, setcheck }) => {
     getDate()
   }, [])
 
-  useEffect(() => {
-    console.log('avantageData', avantageData)
-  }, [avantageData])
-
   const hendleDeleteAvantage = (index) => {
     setAvantageData((prevState) => ({
       ...prevState,
@@ -200,7 +196,6 @@ const UpdatePackDeFormation = ({ packDeFormation, setcheck }) => {
       )
 
       if (res.data) {
-        console.log('res.data', res.data)
         setAvantageData({
           title_1: '',
           title_2: '',
@@ -214,10 +209,8 @@ const UpdatePackDeFormation = ({ packDeFormation, setcheck }) => {
         })
         setFileURL(null)
 
-        // setAvantageData(res.data.packDeFormation)
-
         const updatedPack = res.data.packDeFormation
-        console.log('updatedPack', updatedPack)
+
         setAvantageData((prevState) => ({
           ...prevState,
           ...updatedPack,

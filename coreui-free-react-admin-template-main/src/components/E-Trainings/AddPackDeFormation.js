@@ -36,10 +36,6 @@ const AddPackDeFormation = ({ getPackDeFormation }) => {
   const [fileURL, setFileURL] = useState(null)
 
   useEffect(() => {
-    console.log('avantageData', avantageData)
-  }, [avantageData])
-
-  useEffect(() => {
     return () => {
       if (fileURL) {
         URL.revokeObjectURL(fileURL)
@@ -383,25 +379,43 @@ const AddPackDeFormation = ({ getPackDeFormation }) => {
                           </div>
                         </div>
 
-                        <div className="input-group mb-3">
-                          <label
-                            htmlFor="regular"
-                            className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
-                          >
-                            prix régulier
-                          </label>
-                          <s> {avantageData?.price?.regular} </s>
-                        </div>
+                        {avantageData?.price && (
+                          <div>
+                            <div className="input-group mb-3">
+                              <label
+                                htmlFor="regular"
+                                className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                              >
+                                prix régulier
+                              </label>
+                              <s
+                                style={{
+                                  lineHeight: '2.5',
+                                }}
+                              >
+                                {' '}
+                                {avantageData?.price?.regular}{' '}
+                              </s>
+                            </div>
 
-                        <div className="input-group mb-3">
-                          <label
-                            htmlFor="sale"
-                            className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
-                          >
-                            prix de vente
-                          </label>
-                          <p> {avantageData?.price?.sale} </p>
-                        </div>
+                            <div className="input-group mb-3">
+                              <label
+                                htmlFor="sale"
+                                className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                              >
+                                prix de vente
+                              </label>
+                              <p
+                                style={{
+                                  lineHeight: '2.5',
+                                }}
+                              >
+                                {' '}
+                                {avantageData?.price?.sale}{' '}
+                              </p>
+                            </div>
+                          </div>
+                        )}
 
                         <div className="input-group mb-3">
                           <label

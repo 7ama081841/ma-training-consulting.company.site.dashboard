@@ -13,6 +13,7 @@ import UpdateCoursPayant from '../../../components/cours/UpdateCoursPayant.js'
 import AddTestimony from '../../../components/E-Trainings/AddTestimony.js'
 import AddPackDeFormation from '../../../components/E-Trainings/AddPackDeFormation.js'
 import UpdatePackDeFormation from '../../../components/E-Trainings/UpdatePackDeFormation.js'
+import AddPartenaire from '../../../components/E-Trainings/AddPartenaire.js'
 
 const Etrainings = () => {
   const [reRender, setReRender] = useState(false)
@@ -28,10 +29,6 @@ const Etrainings = () => {
     class_3: [],
     packDeFormation: [],
   })
-
-  useEffect(() => {
-    console.log('check', check)
-  }, [check])
 
   const handleShow = () => setVisible(true)
   const handleClose = () => setVisible(false)
@@ -133,8 +130,6 @@ const Etrainings = () => {
   }
 
   const getPackDeFormation = async () => {
-    console.log('getPackDeFormation is work ')
-
     try {
       const res = await axios.get(
         // 'http://localhost:5000/api/get-PackDeFormation',
@@ -283,6 +278,8 @@ const Etrainings = () => {
       ) : (
         <AddPackDeFormation getPackDeFormation={getPackDeFormation} />
       )}
+
+      <AddPartenaire />
 
       {/* dialog add  ( formations Payant ) class 4 */}
       <CModal visible={visible} onClose={handleClose} size="lg">
