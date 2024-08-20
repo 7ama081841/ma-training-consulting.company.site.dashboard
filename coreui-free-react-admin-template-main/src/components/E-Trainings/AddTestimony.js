@@ -326,15 +326,23 @@ const AddTestimony = () => {
                           </div>
                         </div>
                         <hr />
-
-                        {testimony.length > 0 &&
-                          testimony.map((item, index) => (
-                            <TestimonyComponent
-                              item={item}
-                              setReRender={setReRender}
-                              setTestimony={setTestimony}
-                            />
-                          ))}
+                        <div
+                          style={{
+                            overflow: 'auto',
+                            maxHeight: '400px',
+                            scrollbarWidth: 'thin',
+                            scrollbarColor: 'rgb(0 0 0 / 22%) rgb(251 245 245 / 0%)',
+                          }}
+                        >
+                          {testimony.length > 0 &&
+                            testimony.map((item, index) => (
+                              <TestimonyComponent
+                                item={item}
+                                setReRender={setReRender}
+                                setTestimony={setTestimony}
+                              />
+                            ))}
+                        </div>
                       </div>
                     </form>
                   </div>

@@ -188,37 +188,45 @@ const AddPartenaire = () => {
                           </div>
                         </div>
                         <hr />
-
-                        {testimony.length > 0 &&
-                          testimony.map((item, index) => (
-                            <div key={index}>
-                              <div
-                                style={{
-                                  width: '250px',
-                                }}
-                                className="tm-product-img-dummy mx-auto"
-                              >
-                                <img
+                        <div
+                          style={{
+                            overflow: 'auto',
+                            maxHeight: '400px',
+                            scrollbarWidth: 'thin',
+                            scrollbarColor: 'rgb(0 0 0 / 22%) rgb(251 245 245 / 0%)',
+                          }}
+                        >
+                          {testimony.length > 0 &&
+                            testimony.map((item, index) => (
+                              <div key={index}>
+                                <div
                                   style={{
-                                    width: '100%',
-                                    height: '100%',
+                                    width: '250px',
                                   }}
-                                  id="bg-video"
-                                  src={item?.image}
-                                  type="video/mp4"
-                                />
-                              </div>
-                              <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0 d-flex justify-content-around w-100 py-3 ">
-                                <CButton
-                                  onClick={() => handleDeleteTestimonyData(item?._id)}
-                                  color="danger"
-                                  variant="outline"
+                                  className="tm-product-img-dummy mx-auto"
                                 >
-                                  supprimer
-                                </CButton>
+                                  <img
+                                    style={{
+                                      width: '100%',
+                                      height: '100%',
+                                    }}
+                                    id="bg-video"
+                                    src={item?.image}
+                                    type="video/mp4"
+                                  />
+                                </div>
+                                <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0 d-flex justify-content-around w-100 py-3 ">
+                                  <CButton
+                                    onClick={() => handleDeleteTestimonyData(item?._id)}
+                                    color="danger"
+                                    variant="outline"
+                                  >
+                                    supprimer
+                                  </CButton>
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            ))}
+                        </div>
                       </div>
                     </form>
                   </div>
