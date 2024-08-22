@@ -73,7 +73,6 @@ const AddPartenaire = () => {
       )
 
       if (res.data) {
-        console.log('res.data', res.data)
         setTestimony(res.data)
       }
     } catch (error) {
