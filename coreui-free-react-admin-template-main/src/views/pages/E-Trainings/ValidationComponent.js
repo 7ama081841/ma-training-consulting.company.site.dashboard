@@ -11,11 +11,10 @@ const ValidationComponent = () => {
   const handleClose = () => setVisible(false)
 
   const getStudentData = async () => {
-    console.log('getStudentData is work ')
     try {
       const res = await axios.get(
-        'http://localhost:5000/api/get-student',
-        // 'https://ma-training-consulting-company-site-backend.vercel.app/api/get-student',
+        // 'http://localhost:5000/api/get-student',
+        'https://ma-training-consulting-company-site-backend.vercel.app/api/get-student',
       )
 
       if (res.data) {
