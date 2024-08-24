@@ -50,7 +50,6 @@ const Etrainings = () => {
 
   const handleCategoriesClose = () => {
     setCategoriesOpen(false)
-    //  setCategories('')
   }
 
   const handleDeleteCategories = async (id) => {
@@ -88,7 +87,7 @@ const Etrainings = () => {
         // setReRender(true)
       }
     } catch (error) {
-      console.log('check.header', error)
+      console.log(error)
     }
   }
 
@@ -107,7 +106,7 @@ const Etrainings = () => {
         // setReRender(true)
       }
     } catch (error) {
-      console.log('check.header', error)
+      console.log(error)
     }
   }
 
@@ -126,7 +125,7 @@ const Etrainings = () => {
         // setReRender(true)
       }
     } catch (error) {
-      console.log('check.header', error)
+      console.log(error)
     }
   }
 
@@ -348,7 +347,7 @@ const Etrainings = () => {
           <CModalTitle>formation payant</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <AddCoursPayant handleClose={handleClose} getCategoriesData={categories} />
+          <AddCoursPayant handleClose={handleClose} categories={categories} />
         </CModalBody>
       </CModal>
 
@@ -360,7 +359,7 @@ const Etrainings = () => {
         <CModalBody>
           <UpdateCoursPayant
             handleUpdateCoursClose={handleUpdateCoursClose}
-            getCategoriesData={categories}
+            categories={categories}
             coursId={coursId}
           />
         </CModalBody>

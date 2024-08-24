@@ -5,7 +5,7 @@ import { storage } from '../../config/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 // import { addCoursPayant } from '../redux/actions/coursPayantSlice'
 
-const UpdateCoursPayant = ({ handleUpdateCoursClose, categorys, coursId }) => {
+const UpdateCoursPayant = ({ handleUpdateCoursClose, categories, coursId }) => {
   //   const categorys = useSelector((state) => state.categories.categories)
   const [reRender, setReRender] = useState(false)
   const [certificateType, setCertificateType] = useState('')
@@ -644,11 +644,12 @@ const UpdateCoursPayant = ({ handleUpdateCoursClose, categorys, coursId }) => {
                           value={freeCoursData.cour_Categories}
                         >
                           <option value="">Select one</option>
-                          {categorys.map((item, index) => (
-                            <option key={index} value={item.categories}>
-                              {item.categories}
-                            </option>
-                          ))}
+                          {categories?.length > 0 &&
+                            categories?.map((item, index) => (
+                              <option key={index} value={item.categorie}>
+                                {item.categorie}
+                              </option>
+                            ))}
                         </select>
                         {errors.cour_Categories && (
                           <div className="error ml-3 text-danger">{errors.cour_Categories}</div>

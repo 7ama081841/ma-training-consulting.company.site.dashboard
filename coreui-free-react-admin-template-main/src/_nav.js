@@ -51,7 +51,7 @@ const _nav = [
     component: CNavGroup,
     name: 'Pages',
     to: '/bage',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
     items: [
       // ------------- test nav item ---------------------
       {
