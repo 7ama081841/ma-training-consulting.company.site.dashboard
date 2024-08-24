@@ -1,6 +1,25 @@
 import React from 'react'
+import axios from 'axios'
 
-const Students = ({ handleShow, studentData }) => {
+const Students = ({ handleShow, setStudentData, studentData, getStudentData }) => {
+  const delete_Student = async (id) => {
+    console.log('id', id)
+    const res = await axios.delete(
+      // ` http://localhost:5000/api/delete-student/${id}`,
+      `https://ma-training-consulting-company-site-backend.vercel.app/api/delete-student/${id}`,
+    )
+
+    if (res.data) {
+      setStudentData([])
+      getStudentData()
+    }
+
+    try {
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className="col-xl-8 col-lg-12 tm-md-12 tm-sm-12 tm-col ">
       <div className="tm-block h-100">
@@ -39,7 +58,6 @@ const Students = ({ handleShow, studentData }) => {
                   <tr key={index}>
                     <td className="tm-product-name">{item.student_name}</td>
                     <td className="text-center">{item.student_job_title}</td>
-                    {/* <td className="text-center">255</td>*/}
                     <td> {item.student_id} </td>
                     <td>
                       <i
@@ -53,7 +71,7 @@ const Students = ({ handleShow, studentData }) => {
                         style={{
                           cursor: 'pointer',
                         }}
-                        //   onClick={() => handledeleteCoursPayant(item._id)}
+                        onClick={() => delete_Student(item._id)}
                         className="fas fa-trash-alt tm-trash-icon"
                       ></i>
                     </td>

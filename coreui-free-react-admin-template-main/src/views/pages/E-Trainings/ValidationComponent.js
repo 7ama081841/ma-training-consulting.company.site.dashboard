@@ -31,7 +31,12 @@ const ValidationComponent = () => {
 
   return (
     <div className="validation">
-      <Students handleShow={handleShow} handleClose={handleClose} studentData={studentData} />
+      <Students
+        handleShow={handleShow}
+        setStudentData={setStudentData}
+        studentData={studentData}
+        getStudentData={getStudentData}
+      />
 
       <CModal visible={visible} onClose={handleClose} size="lg">
         <CModalHeader closeButton>

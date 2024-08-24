@@ -69,8 +69,8 @@ const Addstudent = ({ getStudentData, handleClose }) => {
       }
 
       const res = await axios.post(
-        // 'http://localhost:5000/api/add-student',
-        'https://ma-training-consulting-company-site-backend.vercel.app/api/add-student',
+        'http://localhost:5000/api/add-student',
+        // 'https://ma-training-consulting-company-site-backend.vercel.app/api/add-student',
         dataToSubmit,
         {
           headers: {
