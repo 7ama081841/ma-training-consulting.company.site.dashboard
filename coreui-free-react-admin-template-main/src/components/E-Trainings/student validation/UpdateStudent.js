@@ -658,7 +658,7 @@ const UpdateStudent = ({ studentId, handleUpdateStudentClose, getStudentData }) 
                       <div className="input-group mb-3 d-flex justify-content-center">
                         <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0 text-center">
                           <button type="submit" className="btn btn-primary">
-                            Ajouter
+                            modifier
                           </button>
                         </div>
                       </div>
