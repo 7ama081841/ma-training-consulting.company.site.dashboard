@@ -1,20 +1,47 @@
 import React from 'react'
 import axios from 'axios'
+import { ref, deleteObject } from 'firebase/storage'
+import { storage } from '../../../config/firebaseConfig'
 
-const Students = ({ handleShow, setStudentData, studentData, getStudentData }) => {
-  const delete_Student = async (id) => {
-    console.log('id', id)
-    const res = await axios.delete(
-      // ` http://localhost:5000/api/delete-student/${id}`,
-      `https://ma-training-consulting-company-site-backend.vercel.app/api/delete-student/${id}`,
-    )
+const Students = ({
+  handleShow,
+  setStudentData,
+  studentData,
+  getStudentData,
+  handleUpdateStudentShow,
+}) => {
+  const delete_Student = async (student) => {
+    const deleteCertificatesImage = (url) => {
+      // function delete file from filrebase
+      const rerFile = ref(storage, url)
 
-    if (res.data) {
-      setStudentData([])
-      getStudentData()
+      deleteObject(rerFile)
+        .then(() => {
+          console.log('the image is deleted')
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     }
 
+    student.certificates_images.map((item) => {
+      deleteCertificatesImage(item)
+    })
+
+    deleteCertificatesImage(student.student_cv)
+
+    deleteCertificatesImage(student.student_image)
+
     try {
+      const res = await axios.delete(
+        // ` http://localhost:5000/api/delete-student/${id}`,
+        `https://ma-training-consulting-company-site-backend.vercel.app/api/delete-student/${student._id}`,
+      )
+
+      if (res.data) {
+        setStudentData([])
+        getStudentData()
+      }
     } catch (error) {
       console.log(error)
     }
@@ -64,14 +91,14 @@ const Students = ({ handleShow, setStudentData, studentData, getStudentData }) =
                         style={{
                           cursor: 'pointer',
                         }}
-                        //   onClick={() => handleUpdateCoursShow(item._id)}
+                        onClick={() => handleUpdateStudentShow(item._id)}
                         className="mx-3 fas fa-pen-alt tm-pen-icon"
                       ></i>
                       <i
                         style={{
                           cursor: 'pointer',
                         }}
-                        onClick={() => delete_Student(item._id)}
+                        onClick={() => delete_Student(item)}
                         className="fas fa-trash-alt tm-trash-icon"
                       ></i>
                     </td>

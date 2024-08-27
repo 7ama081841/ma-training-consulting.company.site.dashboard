@@ -5,10 +5,9 @@ import { CButton } from '@coreui/react'
 import { storage } from '../../../config/firebaseConfig'
 import UpdateCertificate from './UpdateCertificate'
 
-const Addstudent = ({ getStudentData, handleClose }) => {
+const UpdateStudent = ({ studentId, handleUpdateStudentClose, getStudentData }) => {
   const [fileURL, setFileURL] = useState(null)
   const [certificates_image_fileURL, setCertificates_image_fileURL] = useState(null)
-  const [categories, setCategories] = useState([])
   const [certificates_image, setCertificates_image] = useState('')
   const [certificate, setCertificate] = useState({
     certificate_name: '',
@@ -18,46 +17,25 @@ const Addstudent = ({ getStudentData, handleClose }) => {
     certificate_description: '',
   })
 
-  const [definitionData, setDefinitionData] = useState({
-    temoignage_description: '',
-    student_image: '',
-    student_name: '',
-    student_job_title: '',
-    student_cv: '',
-    student_id: '',
-    student_video_link: '',
-    niveau_dinteret_et_de_Participation_aux_sessions: '',
-    interaction_avec_le_formateur_et_les_autres_Participants: '',
-    poser_des_questions_et_des_clarificationsy: '',
-    capacite_a_appliquer_les_conceptse_et_theories: '',
-    qualite_du_travail_pratique_ou_des_projets_presentes: '',
-    capacite_a_resoudre_les_problemes_et_a_innover: '',
-    collaboration_et_travail_dequipe: '',
-    competences_en_communication_efficace: '',
-    capacite_de_reflexion_critique_et_analytique: '',
-    receptivite_aux_retours_dinformation: '',
-    evaluation_Generale_des_Performances_du_participant_a_la_formation: '',
-    certificates_images: [],
-    certificates: [],
-  })
+  const [definitionData, setDefinitionData] = useState({})
 
-  const getCategoriesData = async () => {
+  const get_One_Student = async (id) => {
     try {
       const res = await axios.get(
-        // ' http://localhost:5000/api/get-categories',
-        ' https://ma-training-consulting-company-site-backend.vercel.app/api/get-categories',
+        // `http://localhost:5000/api/get-one-student/${id}`,
+        `https://ma-training-consulting-company-site-backend.vercel.app/api/get-one-student/${id}`,
       )
 
       if (res.data) {
-        setCategories(res.data.categories)
+        setDefinitionData(res.data)
       }
     } catch (error) {
-      console.error(error)
+      console.log(error)
     }
   }
 
   useEffect(() => {
-    getCategoriesData()
+    get_One_Student(studentId)
   }, [])
 
   const handleSubmitDefinitionData = async (e) => {
@@ -71,7 +49,6 @@ const Addstudent = ({ getStudentData, handleClose }) => {
         return getDownloadURL(storageRef)
       }
 
-      const randomText = Math.random().toString(36).substring(2, 7)
       const randomNumber = Math.floor(Math.random() * 1000)
 
       const video_cover_url = definitionData.student_image
@@ -81,23 +58,23 @@ const Addstudent = ({ getStudentData, handleClose }) => {
           )
         : null
 
-      const cv_url = definitionData.student_cv
-        ? await uploadFile(
-            definitionData.student_cv,
-            `student/cvs/${definitionData.student_cv.name}${randomNumber}`,
-          )
-        : null
+      const cv_url =
+        definitionData.student_cv && typeof definitionData.student_cv !== 'string'
+          ? await uploadFile(
+              definitionData.student_cv,
+              `student/cvs/${definitionData.student_cv.name}${randomNumber}`,
+            )
+          : definitionData.student_cv
 
       const dataToSubmit = {
         ...definitionData,
-        student_image: video_cover_url,
+        student_image: fileURL ? video_cover_url : definitionData?.student_image,
         student_cv: cv_url,
-        student_id: `${definitionData.student_id}${randomText}${randomNumber}`,
       }
 
-      const res = await axios.post(
-        // 'http://localhost:5000/api/add-student',
-        'https://ma-training-consulting-company-site-backend.vercel.app/api/add-student',
+      const res = await axios.patch(
+        // `http://localhost:5000/api/update-Student/${studentId}`,
+        `https://ma-training-consulting-company-site-backend.vercel.app/api/update-Student/${studentId}`,
         dataToSubmit,
         {
           headers: {
@@ -107,33 +84,8 @@ const Addstudent = ({ getStudentData, handleClose }) => {
       )
 
       if (res.data) {
-        setDefinitionData({
-          temoignage_description: '',
-          student_image: '',
-          student_name: '',
-          student_job_title: '',
-          student_cv: '',
-          student_id: '',
-          student_video_link: '',
-          niveau_dinteret_et_de_Participation_aux_sessions: '',
-          interaction_avec_le_formateur_et_les_autres_Participants: '',
-          poser_des_questions_et_des_clarificationsy: '',
-          capacite_a_appliquer_les_conceptse_et_theories: '',
-          qualite_du_travail_pratique_ou_des_projets_presentes: '',
-          capacite_a_resoudre_les_problemes_et_a_innover: '',
-          collaboration_et_travail_dequipe: '',
-          competences_en_communication_efficace: '',
-          capacite_de_reflexion_critique_et_analytique: '',
-          receptivite_aux_retours_dinformation: '',
-          evaluation_Generale_des_Performances_du_participant_a_la_formation: '',
-          certificates_images: [],
-          certificates: [],
-        })
-
-        setFileURL(null)
-
-        handleClose()
         getStudentData()
+        handleUpdateStudentClose()
       }
     } catch (error) {
       console.log(error)
@@ -276,7 +228,7 @@ const Addstudent = ({ getStudentData, handleClose }) => {
         <div className="row tm-content-row tm-mt-big">
           <div className="col-12 tm-col-big">
             <div className="tm-block h-100 my-5 ">
-              <h2 className="tm-block-title">ajouter une étudiant</h2>
+              <h2 className="tm-block-title"> Modifier l'étudiant </h2>
               <div className="header">
                 <div className="row mt-4 tm-edit-product-row w-100">
                   <div className="col-xl-7 col-lg-7 col-md-12">
@@ -336,24 +288,6 @@ const Addstudent = ({ getStudentData, handleClose }) => {
                           value={definitionData.student_video_link}
                           className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
                         />
-                      </div>
-                      <div className=" mb-3">
-                        <label htmlFor="student_id" className=" col-form-label">
-                          catégorie de certificate
-                        </label>
-                        <select
-                          className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
-                          name="student_id"
-                          onChange={handleChangeDefinitionData}
-                        >
-                          <option value="">Select one</option>
-                          {categories?.length > 0 &&
-                            categories?.map((item, index) => (
-                              <option key={index} value={item.categories_id}>
-                                {item.categorie}
-                              </option>
-                            ))}
-                        </select>
                       </div>
 
                       <div
@@ -716,7 +650,7 @@ const Addstudent = ({ getStudentData, handleClose }) => {
                             className="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
                             name="temoignage_description"
                             onChange={handleChangeDefinitionData}
-                            value={certificate.temoignage_description}
+                            value={definitionData?.temoignage_description}
                           ></textarea>
                         </div>
                       </div>
@@ -732,14 +666,14 @@ const Addstudent = ({ getStudentData, handleClose }) => {
                   </div>
                   <div className="col-xl-4 col-lg-4 col-md-12 mx-auto mb-4 text-center ">
                     <div className="tm-product-img-dummy mx-auto">
-                      {fileURL ? (
+                      {fileURL || definitionData?.student_image ? (
                         <img
                           style={{
                             width: '100%',
                             height: '100%',
                           }}
                           id="bg-video"
-                          src={fileURL}
+                          src={fileURL ? fileURL : definitionData?.student_image}
                           type="video/mp4"
                         />
                       ) : (
@@ -859,4 +793,4 @@ const Addstudent = ({ getStudentData, handleClose }) => {
   )
 }
 
-export default Addstudent
+export default UpdateStudent
