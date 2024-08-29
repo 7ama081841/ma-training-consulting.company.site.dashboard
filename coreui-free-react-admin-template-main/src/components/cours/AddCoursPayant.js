@@ -5,7 +5,7 @@ import { storage } from '../../config/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 // import { addCoursPayant } from '../redux/actions/coursPayantSlice'
 
-const AddCoursPayant = ({ handleClose, categories }) => {
+const AddCoursPayant = ({ handleClose, categories, getAllCoursPayant }) => {
   //   const categorys = useSelector((state) => state.categories.categories)
   const [reRender, setReRender] = useState(false)
   const [certificateType, setCertificateType] = useState('')
@@ -26,6 +26,7 @@ const AddCoursPayant = ({ handleClose, categories }) => {
     cour_Categories: '',
     cour_groupes: [],
     cour_optionsList: [],
+    cour_groupe_description: '',
   })
 
   const dispatch = useDispatch()
@@ -297,7 +298,6 @@ const AddCoursPayant = ({ handleClose, categories }) => {
       const res = await axios.post(
         // "http://localhost:5000/api/add-cours-Payant",
         'https://ma-training-consulting-company-site-backend.vercel.app/api/add-cours-Payant',
-        // "https://ma-training-consulting-company-site.onrender.com/api/add-cours",
         dataToSubmit,
         {
           headers: {
@@ -317,13 +317,14 @@ const AddCoursPayant = ({ handleClose, categories }) => {
           cour_Categories: '',
           cour_groupes: [],
           cour_optionsList: [],
+          cour_groupe_description: '',
         })
 
         setFileURL('')
 
         handleClose()
 
-        location.reload()
+        getAllCoursPayant()
       }
     } catch (error) {
       console.log(error)
@@ -562,6 +563,22 @@ const AddCoursPayant = ({ handleClose, categories }) => {
 
                       <div>
                         <p className="text-center">interface 4</p>
+
+                        <div className="input-group mb-3">
+                          <label
+                            htmlFor="cour_groupe_description"
+                            className="col-xl-4 col-lg-4 col-md-4 col-sm-5 mb-2"
+                          >
+                            description de groupe
+                          </label>
+                          <textarea
+                            className="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                            required
+                            name="cour_groupe_description"
+                            onChange={handleChangeFreeCoursData}
+                            value={freeCoursData.cour_groupe_description}
+                          ></textarea>
+                        </div>
 
                         <div className="input-group mb-3">
                           <label className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">

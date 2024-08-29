@@ -347,7 +347,11 @@ const Etrainings = () => {
           <CModalTitle>formation payant</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <AddCoursPayant handleClose={handleClose} categories={categories} />
+          <AddCoursPayant
+            handleClose={handleClose}
+            categories={categories}
+            getAllCoursPayant={getAllCoursPayant}
+          />
         </CModalBody>
       </CModal>
 
@@ -361,6 +365,7 @@ const Etrainings = () => {
             handleUpdateCoursClose={handleUpdateCoursClose}
             categories={categories}
             coursId={coursId}
+            getAllCoursPayant={getAllCoursPayant}
           />
         </CModalBody>
       </CModal>
