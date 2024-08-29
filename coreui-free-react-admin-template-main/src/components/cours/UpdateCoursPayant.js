@@ -377,7 +377,7 @@ const UpdateCoursPayant = ({ handleUpdateCoursClose, categories, coursId }) => {
                             htmlFor="cour_teacher"
                             className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
                           >
-                            Nom de formateur
+                            niveau
                           </label>
                           <input
                             name="cour_teacher"
