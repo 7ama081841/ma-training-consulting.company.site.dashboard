@@ -1,5 +1,6 @@
 import React from 'react'
 import ValidationComponent from './views/pages/E-Trainings/ValidationComponent.js'
+import CourseParticipants from './views/pages/E-Trainings/CourseParticipants.js'
 
 const Etrainings = React.lazy(() => import('./views/pages/E-Trainings/Etrainings.jsx'))
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
@@ -65,6 +66,11 @@ const routes = [
   { path: '/base/breadcrumbs', name: 'Breadcrumbs', element: Breadcrumbs },
   { path: '/pages/E-Trainings', name: 'E-Trainings', element: Etrainings },
   { path: '/pages/E-Trainings/Validation', name: 'Validation', element: ValidationComponent },
+  {
+    path: '/pages/E-Trainings/CourseParticipants',
+    name: 'Course Participants',
+    element: CourseParticipants,
+  },
   { path: '/base/cards', name: 'Cards', element: Cards },
   { path: '/base/carousels', name: 'Carousel', element: Carousels },
   { path: '/base/collapses', name: 'Collapse', element: Collapses },

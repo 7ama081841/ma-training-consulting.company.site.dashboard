@@ -64,6 +64,11 @@ const _nav = [
         name: 'E-Trainings > Validation',
         to: '/pages/E-Trainings/Validation',
       },
+      {
+        component: CNavItem,
+        name: 'E-Trainings > Formation...',
+        to: '/pages/E-Trainings/CourseParticipants',
+      },
 
       // ------------- test nav item ---------------------
     ],

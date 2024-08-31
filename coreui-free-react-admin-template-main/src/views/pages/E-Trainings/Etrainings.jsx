@@ -6,7 +6,6 @@ import Definition from '../../../components/E-Trainings/Definition.js'
 import UpdateDefinition from '../../../components/E-Trainings/UpdateDefinition.js'
 import Avantage from '../../../components/E-Trainings/Avantage.js'
 import UpdateAvantage from '../../../components/E-Trainings/UpdateAvantage.js'
-
 import { CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
 import AddCoursPayant from '../../../components/cours/AddCoursPayant.js'
 import UpdateCoursPayant from '../../../components/cours/UpdateCoursPayant.js'
@@ -31,10 +30,6 @@ const Etrainings = () => {
     class_3: [],
     packDeFormation: [],
   })
-
-  useEffect(() => {
-    console.log('categories', categories)
-  }, [categories])
 
   const handleShow = () => setVisible(true)
   const handleClose = () => setVisible(false)
