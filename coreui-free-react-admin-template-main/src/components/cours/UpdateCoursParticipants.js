@@ -550,7 +550,6 @@ const UpdateCoursParticipants = ({
                           </div>
                         ))}
 
-                      {/* ------------------ start test ------------------------------------ */}
                       <div className="input-group mb-3">
                         <label
                           htmlFor="presentation_title"
@@ -662,12 +661,11 @@ const UpdateCoursParticipants = ({
                           ))}
                       </div>
                       <hr />
-                      {/* ------------------ end test ------------------------------------ */}
 
                       <div className="input-group my-3">
                         <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0 w-100 text-center ">
                           <button type="submit" className="btn btn-primary">
-                            Ajouter
+                            modifier
                           </button>
                         </div>
                       </div>
