@@ -1,16 +1,40 @@
 import React from 'react'
 import axios from 'axios'
+import { ref, deleteObject } from 'firebase/storage'
+import { storage } from '../../config/firebaseConfig'
 
-const FormationsParticipantsTable = ({ handleAddCoursParticipantsOpen, courses }) => {
-  const handledeleteCoursParticipants = async (id) => {
+const FormationsParticipantsTable = ({
+  handleAddCoursParticipantsOpen,
+  handleUpdateCoursParticipantsOpen,
+  getAllCoursesParticipants,
+  courses,
+  setCourses,
+}) => {
+  const handledeleteCoursParticipants = async (item) => {
+    // function delete file from filrebase
+    const deleteCertificatesImage = (url) => {
+      const rerFile = ref(storage, url)
+
+      deleteObject(rerFile)
+        .then(() => {})
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+
+    item.cour_presentation?.map((item) => {
+      deleteCertificatesImage(item.presentation_image)
+    })
+
     try {
       const res = await axios.delete(
-        // `http://localhost:5000/api/delete-cours-participants/${id}`
-        `https://ma-training-consulting-company-site-backend.vercel.app/api/delete-cours-participants/${id}`,
+        // `http://localhost:5000/api/delete-cours-participants/${item._id}`
+        `https://ma-training-consulting-company-site-backend.vercel.app/api/delete-cours-participants/${item._id}`,
       )
 
       if (res.data) {
-        dispatch(deleteCoursParticipants(res.data.course._id))
+        setCourses([])
+        getAllCoursesParticipants()
       }
     } catch (error) {
       console.error(error)
@@ -66,7 +90,17 @@ const FormationsParticipantsTable = ({ handleAddCoursParticipantsOpen, courses }
                     <td>2018-10-28</td>
                     <td>
                       <i
-                        onClick={() => handledeleteCoursParticipants(item._id)}
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handleUpdateCoursParticipantsOpen(item._id)}
+                        className="mx-3 fas fa-pen-alt tm-pen-icon"
+                      ></i>
+                      <i
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handledeleteCoursParticipants(item)}
                         className="fas fa-trash-alt tm-trash-icon"
                       ></i>
                     </td>

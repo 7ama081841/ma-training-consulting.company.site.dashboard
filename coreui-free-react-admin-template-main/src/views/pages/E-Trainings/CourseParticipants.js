@@ -3,9 +3,11 @@ import FormationsParticipantsTable from '../../../components/cours/FormationsPar
 import axios from 'axios'
 import { CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
 import AddCoursParticipants from '../../../components/cours/AddCoursParticipants'
+import UpdateCoursParticipants from '../../../components/cours/UpdateCoursParticipants'
 
 const CourseParticipants = () => {
   const [courses, setCourses] = useState([])
+  const [coursesId, setCoursesId] = useState()
   const [categories, setCategories] = useState([])
   const [addCoursParticipantsOpen, setAddCoursParticipantsOpen] = useState(false)
   const [updateCoursParticipantsOpen, setUpdateCoursParticipantsOpen] = useState(false)
@@ -15,6 +17,14 @@ const CourseParticipants = () => {
   }
   const handleAddCoursParticipantsClose = () => {
     setAddCoursParticipantsOpen(false)
+  }
+
+  const handleUpdateCoursParticipantsOpen = (id) => {
+    setCoursesId(id)
+    setUpdateCoursParticipantsOpen(true)
+  }
+  const handleUpdateCoursParticipantsClose = () => {
+    setUpdateCoursParticipantsOpen(false)
   }
 
   const getAllCoursesParticipants = async () => {
@@ -56,7 +66,10 @@ const CourseParticipants = () => {
     <div className="CourseParticipants">
       <FormationsParticipantsTable
         handleAddCoursParticipantsOpen={handleAddCoursParticipantsOpen}
+        handleUpdateCoursParticipantsOpen={handleUpdateCoursParticipantsOpen}
+        getAllCoursesParticipants={getAllCoursesParticipants}
         courses={courses}
+        setCourses={setCourses}
       />
 
       <CModal
@@ -65,13 +78,31 @@ const CourseParticipants = () => {
         size="lg"
       >
         <CModalHeader closeButton>
-          <CModalTitle>Validation</CModalTitle>
+          <CModalTitle>ajouter une formation</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <AddCoursParticipants
             categories={categories}
             getAllCoursesParticipants={getAllCoursesParticipants}
             handleAddCoursParticipantsClose={handleAddCoursParticipantsClose}
+          />
+        </CModalBody>
+      </CModal>
+
+      <CModal
+        visible={updateCoursParticipantsOpen}
+        onClose={handleUpdateCoursParticipantsClose}
+        size="lg"
+      >
+        <CModalHeader closeButton>
+          <CModalTitle>modifier le formation</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <UpdateCoursParticipants
+            coursesId={coursesId}
+            categories={categories}
+            getAllCoursesParticipants={getAllCoursesParticipants}
+            handleUpdateCoursParticipantsClose={handleUpdateCoursParticipantsClose}
           />
         </CModalBody>
       </CModal>

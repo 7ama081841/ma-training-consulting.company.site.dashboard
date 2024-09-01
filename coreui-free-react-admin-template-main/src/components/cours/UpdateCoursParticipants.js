@@ -4,10 +4,11 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { storage } from '../../config/firebaseConfig'
 import SliceComponent from './SliceComponent'
 
-const AddCoursParticipants = ({
+const UpdateCoursParticipants = ({
+  coursesId,
   categories,
   getAllCoursesParticipants,
-  handleAddCoursParticipantsClose,
+  handleUpdateCoursParticipantsClose,
 }) => {
   const [reRender, setReRender] = useState(false)
   const [question, setQuestion] = useState('')
@@ -21,18 +22,7 @@ const AddCoursParticipants = ({
     presentation_description: '',
     presentation_image: '',
   })
-  const [freeCoursData, setFreeCoursData] = useState({
-    cour_title: '',
-    cour_description: '',
-    cour_video: '',
-    cour_pdf: '',
-    cour_Categories: '',
-    cour_test_de_Google: '',
-    download_video_link: '',
-    cour_groupes: [],
-    cour_questions: [],
-    cour_presentation: [],
-  })
+  const [freeCoursData, setFreeCoursData] = useState({})
 
   useEffect(() => {
     console.log('freeCoursData', freeCoursData)
@@ -248,9 +238,9 @@ const AddCoursParticipants = ({
     // if (!validate()) return
 
     try {
-      const res = await axios.post(
-        // 'http://localhost:5000/api/add-cours-participants',
-        'https://ma-training-consulting-company-site-backend.vercel.app/api/add-cours-participants',
+      const res = await axios.patch(
+        // `http://localhost:5000/api/update-cours-participants/${coursesId}`,
+        `https://ma-training-consulting-company-site-backend.vercel.app/api/update-cours-participants/${coursesId}`,
         freeCoursData,
         {
           headers: {
@@ -261,24 +251,33 @@ const AddCoursParticipants = ({
 
       if (res.data) {
         console.log('res.data', res.data)
-        // dispatch(addCoursParticipants(res.data.course))
-        setFreeCoursData({
-          cour_title: '',
-          cour_description: '',
-          cour_video: '',
-          cour_pdf: '',
-          cour_Categories: '',
-          cour_test_de_Google: '',
-          cour_groupes: [],
-          cour_questions: [],
-        })
-        handleAddCoursParticipantsClose()
+
+        handleUpdateCoursParticipantsClose()
         getAllCoursesParticipants()
       }
     } catch (error) {
       console.log(error)
     }
   }
+
+  const getOnesession = async (id) => {
+    try {
+      const res = await axios.get(
+        // `http://localhost:5000/api/get-one-cours-participants/${id}`,
+        `https://ma-training-consulting-company-site-backend.vercel.app/api/get-one-cours-participants/${id}`,
+      )
+
+      if (res.data) {
+        setFreeCoursData(res.data.course)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    getOnesession(coursesId)
+  }, [])
 
   return (
     <div className="Header">
@@ -551,6 +550,7 @@ const AddCoursParticipants = ({
                           </div>
                         ))}
 
+                      {/* ------------------ start test ------------------------------------ */}
                       <div className="input-group mb-3">
                         <label
                           htmlFor="presentation_title"
@@ -662,6 +662,7 @@ const AddCoursParticipants = ({
                           ))}
                       </div>
                       <hr />
+                      {/* ------------------ end test ------------------------------------ */}
 
                       <div className="input-group my-3">
                         <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0 w-100 text-center ">
@@ -710,4 +711,4 @@ const AddCoursParticipants = ({
   )
 }
 
-export default AddCoursParticipants
+export default UpdateCoursParticipants

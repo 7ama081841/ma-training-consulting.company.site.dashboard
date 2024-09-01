@@ -11,14 +11,12 @@ const Students = ({
   handleUpdateStudentShow,
 }) => {
   const delete_Student = async (student) => {
+    // function delete file from filrebase
     const deleteCertificatesImage = (url) => {
-      // function delete file from filrebase
       const rerFile = ref(storage, url)
 
       deleteObject(rerFile)
-        .then(() => {
-          console.log('the image is deleted')
-        })
+        .then(() => {})
         .catch((error) => {
           console.error(error)
         })

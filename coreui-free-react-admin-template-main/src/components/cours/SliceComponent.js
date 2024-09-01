@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 import { storage } from '../../config/firebaseConfig'
 import { CButton } from '@coreui/react'
 
-const SliceComponent = ({ item, index }) => {
+const SliceComponent = ({ item, index, setFreeCoursData }) => {
   const [slide, setSlide] = useState({})
 
   useEffect(() => {
     setSlide(item)
-    console.log(item)
-    console.log('index', index)
   }, [])
 
   const handleChangeslide = (e) => {
@@ -40,6 +38,65 @@ const SliceComponent = ({ item, index }) => {
 
   const handleClickHeaderFile = () => {
     headerfileRef.current.click()
+  }
+
+  const deletePresentationImage = (url, indexDelete) => {
+    // function delete file from filrebase
+    const rerFile = ref(storage, url)
+
+    deleteObject(rerFile)
+      .then(() => {})
+      .catch((error) => {
+        console.error(error)
+      })
+
+    setFreeCoursData((prevState) => ({
+      ...prevState,
+      cour_presentation: prevState.cour_presentation.filter((_, index) => index !== indexDelete),
+    }))
+  }
+
+  const updatePresentation = async (e, url, index) => {
+    e.preventDefault()
+
+    const rerFile = ref(storage, url)
+
+    deleteObject(rerFile)
+      .then(() => {})
+      .catch((error) => {
+        console.error(error)
+      })
+
+    const uploadFile = async (file, filePath) => {
+      const storageRef = ref(storage, filePath)
+      await uploadBytes(storageRef, file)
+      return getDownloadURL(storageRef)
+    }
+
+    const randomNumber = Math.floor(Math.random() * 1000)
+
+    let presentation_image_url = null
+
+    if (fileURL) {
+      presentation_image_url = slide.presentation_image
+        ? await uploadFile(
+            slide.presentation_image,
+            `FormationParticipants/images/${slide.presentation_image.name}${randomNumber}`,
+          )
+        : null
+    }
+
+    const updatedSlide = {
+      ...slide,
+      presentation_image: presentation_image_url,
+    }
+
+    setFreeCoursData((prevState) => ({
+      ...prevState,
+      cour_presentation: prevState.cour_presentation?.map((item, i) =>
+        i === index ? updatedSlide : item,
+      ),
+    }))
   }
 
   return (
@@ -122,14 +179,14 @@ const SliceComponent = ({ item, index }) => {
           <div className="input-group mb-3 d-flex justify-content-center">
             <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0 d-flex justify-content-around ">
               <CButton
-                //    onClick={handleDeleteTestimonyData}
+                onClick={() => deletePresentationImage(item?.presentation_image, index)}
                 color="danger"
                 variant="outline"
               >
                 supprimer
               </CButton>
               <button
-                //    onClick={handleUpdateTestimonyData}
+                onClick={(e) => updatePresentation(e, item?.presentation_image, index)}
                 className="btn btn-primary"
               >
                 modifier

@@ -68,7 +68,7 @@ const routes = [
   { path: '/pages/E-Trainings/Validation', name: 'Validation', element: ValidationComponent },
   {
     path: '/pages/E-Trainings/CourseParticipants',
-    name: 'Course Participants',
+    name: 'Formation Participants',
     element: CourseParticipants,
   },
   { path: '/base/cards', name: 'Cards', element: Cards },

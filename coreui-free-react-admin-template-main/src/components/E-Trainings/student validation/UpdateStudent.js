@@ -193,17 +193,17 @@ const UpdateStudent = ({ studentId, handleUpdateStudentClose, getStudentData }) 
     const rerFile = ref(storage, url)
 
     deleteObject(rerFile)
-      .then(() => {
-        setDefinitionData((prevState) => ({
-          ...prevState,
-          certificates_images: prevState.certificates_images.filter(
-            (_, index) => index !== indexDelete,
-          ),
-        }))
-      })
+      .then(() => {})
       .catch((error) => {
         console.error(error)
       })
+
+    setDefinitionData((prevState) => ({
+      ...prevState,
+      certificates_images: prevState.certificates_images.filter(
+        (_, index) => index !== indexDelete,
+      ),
+    }))
   }
 
   const addCertificate = (e) => {
