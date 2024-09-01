@@ -452,7 +452,7 @@ const UpdateCoursParticipants = ({
                       />
 
                       {freeCoursData.cour_groupes &&
-                        freeCoursData.cour_groupes.map((item, index) => (
+                        freeCoursData.cour_groupes?.map((item, index) => (
                           <div key={index} className="input-group mb-3">
                             <label className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
                               Groupe {index + 1}
@@ -503,7 +503,7 @@ const UpdateCoursParticipants = ({
                       />
 
                       {freeCoursData.cour_questions &&
-                        freeCoursData.cour_questions.map((item, index) => (
+                        freeCoursData.cour_questions?.map((item, index) => (
                           <div key={index} className="input-group mb-3">
                             <label className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
                               question {index + 1}
@@ -526,7 +526,7 @@ const UpdateCoursParticipants = ({
                                 value="Ajouter Une Suggestion"
                                 onClick={() => handleAddSuggestions(index)}
                               />
-                              {item.cour_Suggestions.map((item, index) => (
+                              {item.cour_Suggestions?.map((item, index) => (
                                 <p key={index}>{item}</p>
                               ))}
                               <input
@@ -651,7 +651,7 @@ const UpdateCoursParticipants = ({
                         }}
                       >
                         {freeCoursData?.cour_presentation?.length > 0 &&
-                          freeCoursData.cour_presentation.map((item, index) => (
+                          freeCoursData.cour_presentation?.map((item, index) => (
                             <div key={index}>
                               <SliceComponent
                                 item={item}
