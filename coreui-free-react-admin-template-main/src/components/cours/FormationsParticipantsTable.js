@@ -11,19 +11,30 @@ const FormationsParticipantsTable = ({
   setCourses,
 }) => {
   const handledeleteCoursParticipants = async (item) => {
-    // function delete file from filrebase
     const deleteCertificatesImage = (url) => {
+      if (!url) {
+        console.error('URL is empty or invalid, skipping this deletion.')
+
+        return
+      }
+
       const rerFile = ref(storage, url)
 
       deleteObject(rerFile)
-        .then(() => {})
+        .then(() => {
+          console.log(`Deleted file at ${url}`)
+        })
         .catch((error) => {
-          console.error(error)
+          console.error('Error deleting file:', error)
         })
     }
 
-    item.cour_presentation?.map((item) => {
-      deleteCertificatesImage(item.presentation_image)
+    item.cour_presentation?.forEach((presentationItem) => {
+      if (presentationItem?.presentation_image) {
+        deleteCertificatesImage(presentationItem.presentation_image)
+      } else {
+        console.log('No presentation image to delete for this item.')
+      }
     })
 
     try {
