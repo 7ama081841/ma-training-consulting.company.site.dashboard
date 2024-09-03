@@ -199,6 +199,40 @@ const UpdateCoursParticipantsInderface = ({
                         ></textarea>
                       </div>
 
+                      {/* -------------------------- start test ---------------------------------- */}
+                      <div className="input-group mb-3">
+                        <label
+                          htmlFor="inderface_button_name"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                        >
+                          nom du bouton
+                        </label>
+                        <input
+                          name="inderface_button_name"
+                          // onChange={handleChangeDefinitionData}
+                          type="text"
+                          value={definitionData?.inderface_button_name}
+                          className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
+                        />
+                      </div>
+
+                      <div className="input-group mb-3">
+                        <label
+                          htmlFor="inderface_description"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 mb-2"
+                        >
+                          description
+                        </label>
+                        <textarea
+                          className="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                          name="inderface_description"
+                          // onChange={handleChangeDefinitionData}
+                          value={definitionData?.inderface_description}
+                        ></textarea>
+                      </div>
+
+                      {/* -------------------------- end test ---------------------------------- */}
+
                       <div className="input-group mb-3 d-flex justify-content-center">
                         <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0 text-center">
                           <button type="submit" className="btn btn-primary">

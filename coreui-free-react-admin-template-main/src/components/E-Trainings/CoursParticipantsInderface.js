@@ -5,6 +5,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 const CoursParticipantsInderface = ({ getAllCoursParticipantsInderface }) => {
   const [fileURL, setFileURL] = useState(null)
+  const [fileURL2, setFileURL2] = useState(null)
   const [definitionData, setDefinitionData] = useState({
     inderface_title_1: '',
     inderface_title_2: '',
@@ -12,6 +13,9 @@ const CoursParticipantsInderface = ({ getAllCoursParticipantsInderface }) => {
     inderface_description: '',
     inderface_image: '',
     inderface_button_name: '',
+    inderface_grand_title: '',
+    inderface_description_2: '',
+    inderface_image_2: '',
   })
 
   const handleSubmitDefinitionData = async (e) => {
@@ -32,9 +36,17 @@ const CoursParticipantsInderface = ({ getAllCoursParticipantsInderface }) => {
           )
         : null
 
+      const inderface_image_2_url = definitionData.inderface_image_2
+        ? await uploadFile(
+            definitionData.inderface_image_2,
+            `FormationParticipants/images/${definitionData.inderface_image_2.name}`,
+          )
+        : null
+
       const dataToSubmit = {
         ...definitionData,
         inderface_image: inderface_image_url,
+        inderface_image_2: inderface_image_2_url,
       }
 
       const res = await axios.post(
@@ -66,9 +78,14 @@ const CoursParticipantsInderface = ({ getAllCoursParticipantsInderface }) => {
   }
 
   const headerfileRef = useRef(null)
+  const headerfile2Ref = useRef(null)
 
   const handleClickHeaderFile = () => {
     headerfileRef.current.click()
+  }
+
+  const handleClickHeaderFile2 = () => {
+    headerfile2Ref.current.click()
   }
 
   const handleChangeHeaderFile = (e) => {
@@ -83,6 +100,21 @@ const CoursParticipantsInderface = ({ getAllCoursParticipantsInderface }) => {
         inderface_image: file,
       }))
       setFileURL(newFileURL)
+    }
+  }
+
+  const handleChangeHeaderFile2 = (e) => {
+    if (fileURL2) {
+      URL.revokeObjectURL(fileURL2)
+    }
+    const file = e.target.files[0]
+    if (file) {
+      const newFileURL = URL.createObjectURL(file)
+      setDefinitionData((prevState) => ({
+        ...prevState,
+        inderface_image_2: file,
+      }))
+      setFileURL2(newFileURL)
     }
   }
 
@@ -176,6 +208,40 @@ const CoursParticipantsInderface = ({ getAllCoursParticipantsInderface }) => {
                         ></textarea>
                       </div>
 
+                      {/* -------------------------- start test ---------------------------------- */}
+                      <div className="input-group mb-3">
+                        <label
+                          htmlFor="inderface_grand_title"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
+                        >
+                          grand titre
+                        </label>
+                        <input
+                          name="inderface_grand_title"
+                          onChange={handleChangeDefinitionData}
+                          type="text"
+                          value={definitionData?.inderface_grand_title}
+                          className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
+                        />
+                      </div>
+
+                      <div className="input-group mb-3">
+                        <label
+                          htmlFor="inderface_description_2"
+                          className="col-xl-4 col-lg-4 col-md-4 col-sm-5 mb-2"
+                        >
+                          description 2
+                        </label>
+                        <textarea
+                          className="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                          name="inderface_description_2"
+                          onChange={handleChangeDefinitionData}
+                          value={definitionData?.inderface_description_2}
+                        ></textarea>
+                      </div>
+
+                      {/* -------------------------- end test ---------------------------------- */}
+
                       <div className="input-group mb-3 d-flex justify-content-center">
                         <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0 text-center">
                           <button type="submit" className="btn btn-primary">
@@ -238,6 +304,61 @@ const CoursParticipantsInderface = ({ getAllCoursParticipantsInderface }) => {
                         className="btn btn-primary d-block mx-auto"
                         value="Upload ..."
                         onClick={handleClickHeaderFile}
+                      />
+                    </div>
+
+                    <div className="tm-product-img-dummy mx-auto">
+                      {fileURL2 ? (
+                        <span
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            border: '.5px solid',
+                            width: '200px',
+                            height: '175px',
+                            justifyContent: 'center',
+                            margin: 'auto',
+                          }}
+                        >
+                          <img
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                            }}
+                            id="bg-video"
+                            src={fileURL2}
+                            type="video/mp4"
+                          />
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            border: '.5px solid',
+                            width: '200px',
+                            height: '175px',
+                            justifyContent: 'center',
+                            margin: 'auto',
+                          }}
+                        >
+                          <i className="fas fa-5x fa-cloud-upload-alt"></i>
+                        </span>
+                      )}
+                    </div>
+                    <div className="custom-file mt-3 mb-3">
+                      <input
+                        ref={headerfile2Ref}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleChangeHeaderFile2}
+                        style={{ display: 'none' }}
+                      />
+                      <input
+                        type="button"
+                        className="btn btn-primary d-block mx-auto"
+                        value="Upload ..."
+                        onClick={handleClickHeaderFile2}
                       />
                     </div>
                   </div>
