@@ -87,6 +87,7 @@ const CourseParticipants = () => {
         <UpdateCoursParticipantsInderface
           coursParticipantsInderface={coursParticipantsInderface[0]}
           getAllCoursParticipantsInderface={getAllCoursParticipantsInderface}
+          setCoursParticipantsInderface={setCoursParticipantsInderface}
         />
       ) : (
         <CoursParticipantsInderface

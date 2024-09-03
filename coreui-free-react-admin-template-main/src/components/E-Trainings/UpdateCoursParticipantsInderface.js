@@ -6,6 +6,7 @@ import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage
 const UpdateCoursParticipantsInderface = ({
   getAllCoursParticipantsInderface,
   coursParticipantsInderface,
+  setCoursParticipantsInderface,
 }) => {
   const [fileURL, setFileURL] = useState(null)
   const [definitionData, setDefinitionData] = useState({})
@@ -71,6 +72,7 @@ const UpdateCoursParticipantsInderface = ({
 
       if (res.data) {
         setFileURL(null)
+        setCoursParticipantsInderface([])
         getAllCoursParticipantsInderface()
       }
     } catch (error) {
