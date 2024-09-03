@@ -189,7 +189,7 @@ const SliceComponent = ({ item, index, setFreeCoursData }) => {
                 onClick={(e) => updatePresentation(e, item?.presentation_image, index)}
                 className="btn btn-primary"
               >
-                modifier
+                Modifier
               </button>
             </div>
           </div>

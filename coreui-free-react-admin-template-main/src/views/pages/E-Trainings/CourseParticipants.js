@@ -4,11 +4,14 @@ import axios from 'axios'
 import { CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
 import AddCoursParticipants from '../../../components/cours/AddCoursParticipants'
 import UpdateCoursParticipants from '../../../components/cours/UpdateCoursParticipants'
+import CoursParticipantsInderface from '../../../components/E-Trainings/CoursParticipantsInderface'
+import UpdateCoursParticipantsInderface from '../../../components/E-Trainings/UpdateCoursParticipantsInderface'
 
 const CourseParticipants = () => {
   const [courses, setCourses] = useState([])
   const [coursesId, setCoursesId] = useState()
   const [categories, setCategories] = useState([])
+  const [coursParticipantsInderface, setCoursParticipantsInderface] = useState([])
   const [addCoursParticipantsOpen, setAddCoursParticipantsOpen] = useState(false)
   const [updateCoursParticipantsOpen, setUpdateCoursParticipantsOpen] = useState(false)
 
@@ -42,6 +45,21 @@ const CourseParticipants = () => {
     }
   }
 
+  const getAllCoursParticipantsInderface = async () => {
+    try {
+      const res = await axios.get(
+        // 'http://localhost:5000/api/get-all-cours-participants-inderface',
+        'https://ma-training-consulting-company-site-backend.vercel.app/api/get-all-cours-participants-inderface',
+      )
+
+      if (res.data) {
+        setCoursParticipantsInderface(res.data.allCoursParticipantsInderface1)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const getCategoriesData = async () => {
     try {
       const res = await axios.get(
@@ -60,10 +78,22 @@ const CourseParticipants = () => {
   useEffect(() => {
     getAllCoursesParticipants()
     getCategoriesData()
+    getAllCoursParticipantsInderface()
   }, [])
 
   return (
     <div className="CourseParticipants">
+      {coursParticipantsInderface.length > 0 ? (
+        <UpdateCoursParticipantsInderface
+          coursParticipantsInderface={coursParticipantsInderface[0]}
+          getAllCoursParticipantsInderface={getAllCoursParticipantsInderface}
+        />
+      ) : (
+        <CoursParticipantsInderface
+          getAllCoursParticipantsInderface={getAllCoursParticipantsInderface}
+        />
+      )}
+
       <FormationsParticipantsTable
         handleAddCoursParticipantsOpen={handleAddCoursParticipantsOpen}
         handleUpdateCoursParticipantsOpen={handleUpdateCoursParticipantsOpen}
@@ -71,7 +101,6 @@ const CourseParticipants = () => {
         courses={courses}
         setCourses={setCourses}
       />
-
       <CModal
         visible={addCoursParticipantsOpen}
         onClose={handleAddCoursParticipantsClose}
@@ -88,7 +117,6 @@ const CourseParticipants = () => {
           />
         </CModalBody>
       </CModal>
-
       <CModal
         visible={updateCoursParticipantsOpen}
         onClose={handleUpdateCoursParticipantsClose}
