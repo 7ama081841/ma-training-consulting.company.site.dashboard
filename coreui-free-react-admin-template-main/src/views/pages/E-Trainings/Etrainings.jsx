@@ -79,7 +79,7 @@ const Etrainings = () => {
           ...prevCheck,
           header: res.data,
         }))
-        // setReRender(true)
+        setValidationInterface
       }
     } catch (error) {
       console.log(error)
@@ -98,7 +98,6 @@ const Etrainings = () => {
           ...prevCheck,
           class_2: res.data,
         }))
-        // setReRender(true)
       }
     } catch (error) {
       console.log(error)

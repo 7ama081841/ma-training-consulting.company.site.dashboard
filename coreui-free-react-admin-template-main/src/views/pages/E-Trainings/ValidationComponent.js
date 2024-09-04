@@ -14,10 +14,6 @@ const ValidationComponent = () => {
   const [studentData, setStudentData] = useState([])
   const [validationInterface, setValidationInterface] = useState([])
 
-  useEffect(() => {
-    console.log('validationInterface', validationInterface)
-  }, [validationInterface])
-
   const handleShow = () => setVisible(true)
   const handleClose = () => setVisible(false)
 
