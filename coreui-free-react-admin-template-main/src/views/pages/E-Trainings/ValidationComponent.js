@@ -4,12 +4,19 @@ import { CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
 import Addstudent from '../../../components/E-Trainings/student validation/Addstudent'
 import Students from '../../../components/E-Trainings/student validation/Students'
 import UpdateStudent from '../../../components/E-Trainings/student validation/UpdateStudent'
+import AddValidationInterface from '../../../components/E-Trainings/student validation/AddValidationInterface'
+import UpdateValidationInterface from '../../../components/E-Trainings/student validation/UpdateValidationInterface'
 
 const ValidationComponent = () => {
   const [visible, setVisible] = useState(false)
   const [updateStudentVisible, setUpdateStudentVisible] = useState(false)
   const [studentId, setStudentId] = useState('')
   const [studentData, setStudentData] = useState([])
+  const [validationInterface, setValidationInterface] = useState([])
+
+  useEffect(() => {
+    console.log('validationInterface', validationInterface)
+  }, [validationInterface])
 
   const handleShow = () => setVisible(true)
   const handleClose = () => setVisible(false)
@@ -36,12 +43,38 @@ const ValidationComponent = () => {
     }
   }
 
+  const get_Validation_Interface = async () => {
+    try {
+      const res = await axios.get(
+        // 'http://localhost:5000/api/get-Validation-Interface',
+        'https://ma-training-consulting-company-site-backend.vercel.app/api/get-Validation-Interface',
+      )
+
+      if (res.data) {
+        setValidationInterface(res.data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     getStudentData()
+    get_Validation_Interface()
   }, [])
 
   return (
     <div className="validation">
+      {' '}
+      {validationInterface.length > 0 ? (
+        <UpdateValidationInterface
+          validationInterface={validationInterface[0]}
+          get_Validation_Interface={get_Validation_Interface}
+          setValidationInterface={setValidationInterface}
+        />
+      ) : (
+        <AddValidationInterface get_Validation_Interface={get_Validation_Interface} />
+      )}
       <Students
         handleShow={handleShow}
         handleUpdateStudentShow={handleUpdateStudentShow}
@@ -49,7 +82,6 @@ const ValidationComponent = () => {
         studentData={studentData}
         getStudentData={getStudentData}
       />
-
       <CModal visible={visible} onClose={handleClose} size="lg">
         <CModalHeader closeButton>
           <CModalTitle>Validation</CModalTitle>
@@ -58,7 +90,6 @@ const ValidationComponent = () => {
           <Addstudent getStudentData={getStudentData} handleClose={handleClose} />
         </CModalBody>
       </CModal>
-
       <CModal visible={updateStudentVisible} onClose={handleUpdateStudentClose} size="lg">
         <CModalHeader closeButton>
           <CModalTitle>Validation</CModalTitle>

@@ -208,7 +208,6 @@ const CoursParticipantsInderface = ({ getAllCoursParticipantsInderface }) => {
                         ></textarea>
                       </div>
 
-                      {/* -------------------------- start test ---------------------------------- */}
                       <div className="input-group mb-3">
                         <label
                           htmlFor="inderface_grand_title"
@@ -239,8 +238,6 @@ const CoursParticipantsInderface = ({ getAllCoursParticipantsInderface }) => {
                           value={definitionData?.inderface_description_2}
                         ></textarea>
                       </div>
-
-                      {/* -------------------------- end test ---------------------------------- */}
 
                       <div className="input-group mb-3 d-flex justify-content-center">
                         <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0 text-center">
