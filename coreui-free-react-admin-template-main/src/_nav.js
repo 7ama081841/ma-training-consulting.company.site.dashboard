@@ -53,7 +53,7 @@ const _nav = [
     to: '/bage',
     icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
     items: [
-      // ------------- test nav item ---------------------
+      // ------------- start test nav item ---------------------
       {
         component: CNavItem,
         name: 'E-Trainings',
@@ -69,8 +69,13 @@ const _nav = [
         name: 'E-Trainings > Formation...',
         to: '/pages/E-Trainings/CourseParticipants',
       },
+      {
+        component: CNavItem,
+        name: 'E-Trainings > Formation...',
+        to: '/pages/E-Trainings/FormationDintiation',
+      },
 
-      // ------------- test nav item ---------------------
+      // ------------- end test nav item ---------------------
     ],
   },
 

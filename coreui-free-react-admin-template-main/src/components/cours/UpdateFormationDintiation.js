@@ -1,14 +1,14 @@
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 import { storage } from '../../config/firebaseConfig'
 import SliceComponent from './SliceComponent'
 
-const UpdateCoursParticipants = ({
+const UpdateFormationDintiation = ({
+  categorys,
+  handleUpdateFormationDintiationClose,
+  getAllCourses,
   coursesId,
-  categories,
-  getAllCoursesParticipants,
-  handleUpdateCoursParticipantsClose,
 }) => {
   const [reRender, setReRender] = useState(false)
   const [question, setQuestion] = useState('')
@@ -25,7 +25,16 @@ const UpdateCoursParticipants = ({
   const [freeCoursData, setFreeCoursData] = useState({})
 
   const headerfileRef = useRef(null)
+  const headerfile2Ref = useRef(null)
   const [fileURL, setFileURL] = useState(null)
+  const [file2URL, setFile2URL] = useState(null)
+  const [oldImage, setOldImage] = useState('')
+
+  useEffect(() => {
+    if (typeof freeCoursData.cour_image === 'string') {
+      setOldImage(freeCoursData.cour_image)
+    }
+  }, [freeCoursData])
 
   const handleChangeHeaderFile = (e) => {
     if (fileURL) {
@@ -42,8 +51,27 @@ const UpdateCoursParticipants = ({
     }
   }
 
+  const handleChangeFile2 = (e) => {
+    if (file2URL) {
+      URL.revokeObjectURL(file2URL)
+    }
+    const file = e.target.files[0]
+    if (file) {
+      const newFileURL = URL.createObjectURL(file)
+      setFreeCoursData((prevState) => ({
+        ...prevState,
+        cour_image: file,
+      }))
+      setFile2URL(newFileURL)
+    }
+  }
+
   const handleClickHeaderFile = () => {
     headerfileRef.current.click()
+  }
+
+  const handleClickFile2 = () => {
+    headerfile2Ref.current.click()
   }
 
   const handleAddSlide = async (e) => {
@@ -61,7 +89,7 @@ const UpdateCoursParticipants = ({
     const presentation_image_url = slide.presentation_image
       ? await uploadFile(
           slide.presentation_image,
-          `FormationParticipants/images/${slide.presentation_image.name}${randomNumber}`,
+          `FormationDintiation/images/${slide.presentation_image.name}${randomNumber}`,
         )
       : null
 
@@ -233,10 +261,46 @@ const UpdateCoursParticipants = ({
     e.preventDefault()
 
     try {
+      let cour_image_url = oldImage
+
+      if (oldImage && file2URL) {
+        const rerFile = ref(storage, oldImage)
+
+        try {
+          await deleteObject(rerFile)
+          console.log('Old file deleted successfully.')
+        } catch (error) {
+          console.error('Failed to delete old file:', error)
+        }
+      }
+
+      if (file2URL) {
+        // Upload files to Firebase Storage
+        const uploadFile = async (file, filePath) => {
+          const storageRef = ref(storage, filePath)
+          await uploadBytes(storageRef, file)
+          return getDownloadURL(storageRef)
+        }
+
+        const randomNumber = Math.floor(Math.random() * 1000)
+
+        cour_image_url = freeCoursData.cour_image
+          ? await uploadFile(
+              freeCoursData.cour_image,
+              `FormationDintiation/images/${freeCoursData.cour_image.name}${randomNumber}`,
+            )
+          : null
+      }
+
+      const dataToSubmit = {
+        ...freeCoursData,
+        cour_image: cour_image_url,
+      }
+
       const res = await axios.patch(
-        // `http://localhost:5000/api/update-cours-participants/${coursesId}`,
-        `https://ma-training-consulting-company-site-backend.vercel.app/api/update-cours-participants/${coursesId}`,
-        freeCoursData,
+        // `http://localhost:5000/api/Update-Formation-Dintiation/${coursesId} `,
+        `https://ma-training-consulting-company-site-backend.vercel.app/api/Update-Formation-Dintiation/${coursesId}`,
+        dataToSubmit,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -245,19 +309,19 @@ const UpdateCoursParticipants = ({
       )
 
       if (res.data) {
-        handleUpdateCoursParticipantsClose()
-        getAllCoursesParticipants()
+        getAllCourses()
+        handleUpdateFormationDintiationClose()
       }
     } catch (error) {
       console.log(error)
     }
   }
 
-  const getOnesession = async (id) => {
+  const getOneCourses = async () => {
     try {
       const res = await axios.get(
-        // `http://localhost:5000/api/get-one-cours-participants/${id}`,
-        `https://ma-training-consulting-company-site-backend.vercel.app/api/get-one-cours-participants/${id}`,
+        // `http://localhost:5500/api/get-one-courses/${coursesId}`
+        `https://ma-training-consulting-company-site-backend.vercel.app/api/get-one-courses/${coursesId}`,
       )
 
       if (res.data) {
@@ -269,7 +333,7 @@ const UpdateCoursParticipants = ({
   }
 
   useEffect(() => {
-    getOnesession(coursesId)
+    getOneCourses()
   }, [])
 
   return (
@@ -292,7 +356,7 @@ const UpdateCoursParticipants = ({
                         <input
                           name="cour_title"
                           onChange={handleChangeFreeCoursData}
-                          value={freeCoursData.cour_title}
+                          value={freeCoursData?.cour_title}
                           type="text"
                           className="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
                         />
@@ -313,7 +377,7 @@ const UpdateCoursParticipants = ({
                           className="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
                           name="cour_description"
                           onChange={handleChangeFreeCoursData}
-                          value={freeCoursData.cour_description}
+                          value={freeCoursData?.cour_description}
                         ></textarea>
 
                         {errors.cour_description && (
@@ -332,7 +396,7 @@ const UpdateCoursParticipants = ({
                           name="cour_video"
                           onChange={handleChangeFreeCoursData}
                           type="text"
-                          value={freeCoursData.cour_video}
+                          value={freeCoursData?.cour_video}
                           className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
                         />
                         {errors.cour_video && (
@@ -351,7 +415,7 @@ const UpdateCoursParticipants = ({
                           name="download_video_link"
                           onChange={handleChangeFreeCoursData}
                           type="text"
-                          value={freeCoursData.download_video_link}
+                          value={freeCoursData?.download_video_link}
                           className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
                         />
                         {errors.cour_video && (
@@ -370,7 +434,7 @@ const UpdateCoursParticipants = ({
                           name="cour_test_de_Google"
                           onChange={handleChangeFreeCoursData}
                           type="text"
-                          value={freeCoursData.cour_test_de_Google}
+                          value={freeCoursData?.cour_test_de_Google}
                           className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
                         />
                         {errors.cour_test_de_Google && (
@@ -388,7 +452,7 @@ const UpdateCoursParticipants = ({
                           name="cour_pdf"
                           onChange={handleChangeFreeCoursData}
                           type="text"
-                          value={freeCoursData.cour_pdf}
+                          value={freeCoursData?.cour_pdf}
                           className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
                         />
                         {errors.cour_pdf && (
@@ -407,10 +471,10 @@ const UpdateCoursParticipants = ({
                           className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
                           name="cour_Categories"
                           onChange={handleChangeFreeCoursData}
-                          value={freeCoursData.cour_Categories}
+                          value={freeCoursData?.cour_Categories}
                         >
                           <option value="">Select one</option>
-                          {categories?.map((item, index) => (
+                          {categorys?.map((item, index) => (
                             <option key={index} value={item.categorie}>
                               {item.categorie}
                             </option>
@@ -444,8 +508,8 @@ const UpdateCoursParticipants = ({
                         onClick={handleAddGroupe}
                       />
 
-                      {freeCoursData.cour_groupes &&
-                        freeCoursData.cour_groupes?.map((item, index) => (
+                      {freeCoursData?.cour_groupes &&
+                        freeCoursData?.cour_groupes.map((item, index) => (
                           <div key={index} className="input-group mb-3">
                             <label className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
                               Groupe {index + 1}
@@ -495,8 +559,8 @@ const UpdateCoursParticipants = ({
                         onClick={handleAddQuestion}
                       />
 
-                      {freeCoursData.cour_questions &&
-                        freeCoursData.cour_questions?.map((item, index) => (
+                      {freeCoursData?.cour_questions &&
+                        freeCoursData?.cour_questions.map((item, index) => (
                           <div key={index} className="input-group mb-3">
                             <label className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
                               question {index + 1}
@@ -519,7 +583,7 @@ const UpdateCoursParticipants = ({
                                 value="Ajouter Une Suggestion"
                                 onClick={() => handleAddSuggestions(index)}
                               />
-                              {item.cour_Suggestions?.map((item, index) => (
+                              {item.cour_Suggestions.map((item, index) => (
                                 <p key={index}>{item}</p>
                               ))}
                               <input
@@ -643,7 +707,7 @@ const UpdateCoursParticipants = ({
                         }}
                       >
                         {freeCoursData?.cour_presentation?.length > 0 &&
-                          freeCoursData.cour_presentation?.map((item, index) => (
+                          freeCoursData?.cour_presentation.map((item, index) => (
                             <div key={index}>
                               <SliceComponent
                                 item={item}
@@ -658,7 +722,7 @@ const UpdateCoursParticipants = ({
                       <div className="input-group my-3">
                         <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0 w-100 text-center ">
                           <button type="submit" className="btn btn-primary">
-                            modifier
+                            Modifier
                           </button>
                         </div>
                       </div>
@@ -666,13 +730,59 @@ const UpdateCoursParticipants = ({
                   </div>
 
                   <div className="col-xl-4 col-lg-4 col-md-12 mx-auto mb-4">
+                    <div
+                      style={{
+                        display: 'contents',
+                      }}
+                      className="input-group mb-3 text-center "
+                    >
+                      <div>
+                        <div className="tm-product-img-dummy mx-auto">
+                          {file2URL || freeCoursData.cour_image ? (
+                            <img
+                              style={{
+                                width: '130px',
+                                maxHeight: '130px',
+                              }}
+                              id="bg-video"
+                              src={file2URL ? file2URL : freeCoursData.cour_image}
+                              alt="image"
+                            />
+                          ) : (
+                            <i
+                              style={{
+                                border: 'solid .5px',
+                                padding: '31px',
+                              }}
+                              className="fas fa-5x fa-cloud-upload-alt"
+                            ></i>
+                          )}
+                        </div>
+                        <div className="custom-file mt-3 mb-3">
+                          <input
+                            ref={headerfile2Ref}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleChangeFile2}
+                            style={{ display: 'none' }}
+                          />
+                          <input
+                            type="button"
+                            className="btn btn-primary d-block mx-auto"
+                            value="Upload ..."
+                            onClick={handleClickFile2}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="mt-4 text-center ">
                       <div className="tm-product-img-dummy mx-auto">
-                        {freeCoursData.cour_video ? (
+                        {freeCoursData?.cour_video ? (
                           <iframe
                             width="100%"
                             src={`https://www.youtube.com/embed/${
-                              freeCoursData.cour_video.split('watch?v=')[1]
+                              freeCoursData?.cour_video.split('watch?v=')[1]
                             }?si=3_Ef_Lfdsvf7MpH_`}
                             title="YouTube video player"
                             frameBorder="0"
@@ -702,4 +812,4 @@ const UpdateCoursParticipants = ({
   )
 }
 
-export default UpdateCoursParticipants
+export default UpdateFormationDintiation

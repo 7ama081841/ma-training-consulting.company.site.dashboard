@@ -4,11 +4,10 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { storage } from '../../config/firebaseConfig'
 import SliceComponent from './SliceComponent'
 
-const UpdateCoursParticipants = ({
-  coursesId,
-  categories,
-  getAllCoursesParticipants,
-  handleUpdateCoursParticipantsClose,
+const AddFormationDintiation = ({
+  categorys,
+  handleAddFormationDintiationClose,
+  getAllCourses,
 }) => {
   const [reRender, setReRender] = useState(false)
   const [question, setQuestion] = useState('')
@@ -22,10 +21,24 @@ const UpdateCoursParticipants = ({
     presentation_description: '',
     presentation_image: '',
   })
-  const [freeCoursData, setFreeCoursData] = useState({})
+  const [freeCoursData, setFreeCoursData] = useState({
+    cour_image: '',
+    cour_title: '',
+    cour_description: '',
+    cour_video: '',
+    cour_pdf: '',
+    cour_Categories: '',
+    cour_test_de_Google: '',
+    download_video_link: '',
+    cour_groupes: [],
+    cour_questions: [],
+    cour_presentation: [],
+  })
 
   const headerfileRef = useRef(null)
+  const headerfile2Ref = useRef(null)
   const [fileURL, setFileURL] = useState(null)
+  const [file2URL, setFile2URL] = useState(null)
 
   const handleChangeHeaderFile = (e) => {
     if (fileURL) {
@@ -42,8 +55,27 @@ const UpdateCoursParticipants = ({
     }
   }
 
+  const handleChangeFile2 = (e) => {
+    if (file2URL) {
+      URL.revokeObjectURL(file2URL)
+    }
+    const file = e.target.files[0]
+    if (file) {
+      const newFileURL = URL.createObjectURL(file)
+      setFreeCoursData((prevState) => ({
+        ...prevState,
+        cour_image: file,
+      }))
+      setFile2URL(newFileURL)
+    }
+  }
+
   const handleClickHeaderFile = () => {
     headerfileRef.current.click()
+  }
+
+  const handleClickFile2 = () => {
+    headerfile2Ref.current.click()
   }
 
   const handleAddSlide = async (e) => {
@@ -61,7 +93,7 @@ const UpdateCoursParticipants = ({
     const presentation_image_url = slide.presentation_image
       ? await uploadFile(
           slide.presentation_image,
-          `FormationParticipants/images/${slide.presentation_image.name}${randomNumber}`,
+          `FormationDintiation/images/${slide.presentation_image.name}${randomNumber}`,
         )
       : null
 
@@ -233,10 +265,31 @@ const UpdateCoursParticipants = ({
     e.preventDefault()
 
     try {
-      const res = await axios.patch(
-        // `http://localhost:5000/api/update-cours-participants/${coursesId}`,
-        `https://ma-training-consulting-company-site-backend.vercel.app/api/update-cours-participants/${coursesId}`,
-        freeCoursData,
+      // Upload files to Firebase Storage
+      const uploadFile = async (file, filePath) => {
+        const storageRef = ref(storage, filePath)
+        await uploadBytes(storageRef, file)
+        return getDownloadURL(storageRef)
+      }
+
+      const randomNumber = Math.floor(Math.random() * 1000)
+
+      const cour_image_url = freeCoursData.cour_image
+        ? await uploadFile(
+            freeCoursData.cour_image,
+            `FormationDintiation/images/${freeCoursData.cour_image.name}${randomNumber}`,
+          )
+        : null
+
+      const dataToSubmit = {
+        ...freeCoursData,
+        cour_image: cour_image_url,
+      }
+
+      const res = await axios.post(
+        // 'http://localhost:5000/api/add-cours',
+        'https://ma-training-consulting-company-site-backend.vercel.app/api/add-cours',
+        dataToSubmit,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -245,32 +298,13 @@ const UpdateCoursParticipants = ({
       )
 
       if (res.data) {
-        handleUpdateCoursParticipantsClose()
-        getAllCoursesParticipants()
+        getAllCourses()
+        handleAddFormationDintiationClose()
       }
     } catch (error) {
       console.log(error)
     }
   }
-
-  const getOnesession = async (id) => {
-    try {
-      const res = await axios.get(
-        // `http://localhost:5000/api/get-one-cours-participants/${id}`,
-        `https://ma-training-consulting-company-site-backend.vercel.app/api/get-one-cours-participants/${id}`,
-      )
-
-      if (res.data) {
-        setFreeCoursData(res.data.course)
-      }
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  useEffect(() => {
-    getOnesession(coursesId)
-  }, [])
 
   return (
     <div className="Header">
@@ -410,7 +444,7 @@ const UpdateCoursParticipants = ({
                           value={freeCoursData.cour_Categories}
                         >
                           <option value="">Select one</option>
-                          {categories?.map((item, index) => (
+                          {categorys?.map((item, index) => (
                             <option key={index} value={item.categorie}>
                               {item.categorie}
                             </option>
@@ -445,7 +479,7 @@ const UpdateCoursParticipants = ({
                       />
 
                       {freeCoursData.cour_groupes &&
-                        freeCoursData.cour_groupes?.map((item, index) => (
+                        freeCoursData.cour_groupes.map((item, index) => (
                           <div key={index} className="input-group mb-3">
                             <label className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
                               Groupe {index + 1}
@@ -496,7 +530,7 @@ const UpdateCoursParticipants = ({
                       />
 
                       {freeCoursData.cour_questions &&
-                        freeCoursData.cour_questions?.map((item, index) => (
+                        freeCoursData.cour_questions.map((item, index) => (
                           <div key={index} className="input-group mb-3">
                             <label className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">
                               question {index + 1}
@@ -519,7 +553,7 @@ const UpdateCoursParticipants = ({
                                 value="Ajouter Une Suggestion"
                                 onClick={() => handleAddSuggestions(index)}
                               />
-                              {item.cour_Suggestions?.map((item, index) => (
+                              {item.cour_Suggestions.map((item, index) => (
                                 <p key={index}>{item}</p>
                               ))}
                               <input
@@ -643,7 +677,7 @@ const UpdateCoursParticipants = ({
                         }}
                       >
                         {freeCoursData?.cour_presentation?.length > 0 &&
-                          freeCoursData.cour_presentation?.map((item, index) => (
+                          freeCoursData.cour_presentation.map((item, index) => (
                             <div key={index}>
                               <SliceComponent
                                 item={item}
@@ -658,7 +692,7 @@ const UpdateCoursParticipants = ({
                       <div className="input-group my-3">
                         <div className="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0 w-100 text-center ">
                           <button type="submit" className="btn btn-primary">
-                            modifier
+                            Ajouter
                           </button>
                         </div>
                       </div>
@@ -666,6 +700,52 @@ const UpdateCoursParticipants = ({
                   </div>
 
                   <div className="col-xl-4 col-lg-4 col-md-12 mx-auto mb-4">
+                    <div
+                      style={{
+                        display: 'contents',
+                      }}
+                      className="input-group mb-3 text-center "
+                    >
+                      <div>
+                        <div className="tm-product-img-dummy mx-auto">
+                          {file2URL ? (
+                            <img
+                              style={{
+                                width: '130px',
+                                maxHeight: '130px',
+                              }}
+                              id="bg-video"
+                              src={file2URL}
+                              alt="image"
+                            />
+                          ) : (
+                            <i
+                              style={{
+                                border: 'solid .5px',
+                                padding: '31px',
+                              }}
+                              className="fas fa-5x fa-cloud-upload-alt"
+                            ></i>
+                          )}
+                        </div>
+                        <div className="custom-file mt-3 mb-3">
+                          <input
+                            ref={headerfile2Ref}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleChangeFile2}
+                            style={{ display: 'none' }}
+                          />
+                          <input
+                            type="button"
+                            className="btn btn-primary d-block mx-auto"
+                            value="Upload ..."
+                            onClick={handleClickFile2}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="mt-4 text-center ">
                       <div className="tm-product-img-dummy mx-auto">
                         {freeCoursData.cour_video ? (
@@ -702,4 +782,4 @@ const UpdateCoursParticipants = ({
   )
 }
 
-export default UpdateCoursParticipants
+export default AddFormationDintiation

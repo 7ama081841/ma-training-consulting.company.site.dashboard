@@ -88,7 +88,6 @@ const CourseParticipants = () => {
           coursParticipantsInderface={coursParticipantsInderface[0]}
           getAllCoursParticipantsInderface={getAllCoursParticipantsInderface}
           setCoursParticipantsInderface={setCoursParticipantsInderface}
-
         />
       ) : (
         <CoursParticipantsInderface
@@ -103,6 +102,8 @@ const CourseParticipants = () => {
         courses={courses}
         setCourses={setCourses}
       />
+
+      {/* dialog add une formation */}
       <CModal
         visible={addCoursParticipantsOpen}
         onClose={handleAddCoursParticipantsClose}
@@ -119,6 +120,8 @@ const CourseParticipants = () => {
           />
         </CModalBody>
       </CModal>
+
+      {/* dialog update une formation */}
       <CModal
         visible={updateCoursParticipantsOpen}
         onClose={handleUpdateCoursParticipantsClose}

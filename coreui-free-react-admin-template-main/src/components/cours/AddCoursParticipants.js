@@ -34,10 +34,6 @@ const AddCoursParticipants = ({
     cour_presentation: [],
   })
 
-  useEffect(() => {
-    console.log('freeCoursData', freeCoursData)
-  }, [freeCoursData])
-
   const headerfileRef = useRef(null)
   const [fileURL, setFileURL] = useState(null)
 
