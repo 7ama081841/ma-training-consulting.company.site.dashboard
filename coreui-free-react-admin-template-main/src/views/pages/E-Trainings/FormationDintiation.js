@@ -96,9 +96,6 @@ const FormationDintiation = () => {
           get_Formation_Dintiation_Inderface={get_Formation_Dintiation_Inderface}
         />
       )}
-      <FormationDintiationInderface
-        get_Formation_Dintiation_Inderface={get_Formation_Dintiation_Inderface}
-      />
 
       <FormationDintiationTable
         courses={courses}
