@@ -12,7 +12,7 @@ const FormationDintiation = () => {
   const [categorys, setCategorys] = useState([])
   const [addFormationDintiationOpen, setAddFormationDintiationOpen] = useState(false)
   const [updateFormationDintiationOpen, setUpdateFormationDintiationOpen] = useState(false)
-  const [formationDintiationInderface, setFormationDintiationInderface] = useState({})
+  const [formationDintiationInderface, setFormationDintiationInderface] = useState([])
   const [coursesId, setCoursesId] = useState()
 
   const handleAddFormationDintiationClose = () => {
@@ -96,6 +96,9 @@ const FormationDintiation = () => {
           get_Formation_Dintiation_Inderface={get_Formation_Dintiation_Inderface}
         />
       )}
+      <FormationDintiationInderface
+        get_Formation_Dintiation_Inderface={get_Formation_Dintiation_Inderface}
+      />
 
       <FormationDintiationTable
         courses={courses}

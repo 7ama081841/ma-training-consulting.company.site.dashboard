@@ -321,16 +321,16 @@ const UpdeteFormationDintiationInderface = ({
 
                         <div className="input-group mb-3">
                           <label
-                            htmlFor="inderface_title_3"
+                            htmlFor="inderface_3_title"
                             className="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label"
                           >
                             titre
                           </label>
                           <input
-                            name="inderface_title_3"
+                            name="inderface_3_title"
                             onChange={handleChangeDefinitionData}
                             type="text"
-                            value={definitionData?.inderface_title_3}
+                            value={definitionData?.inderface_3_title}
                             className="form-control validate col-xl-9 col-lg-8 col-md-7 col-sm-7"
                           />
                         </div>
