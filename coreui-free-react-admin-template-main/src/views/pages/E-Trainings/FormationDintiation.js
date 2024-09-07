@@ -4,12 +4,15 @@ import axios from 'axios'
 import AddFormationDintiation from '../../../components/cours/AddFormationDintiation'
 import { CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
 import UpdateFormationDintiation from '../../../components/cours/UpdateFormationDintiation'
+import FormationDintiationInderface from '../../../components/E-Trainings/FormationDintiationInderface'
+import UpdeteFormationDintiationInderface from '../../../components/E-Trainings/UpdeteFormationDintiationInderface'
 
 const FormationDintiation = () => {
   const [courses, setCourses] = useState([])
   const [categorys, setCategorys] = useState([])
   const [addFormationDintiationOpen, setAddFormationDintiationOpen] = useState(false)
   const [updateFormationDintiationOpen, setUpdateFormationDintiationOpen] = useState(false)
+  const [formationDintiationInderface, setFormationDintiationInderface] = useState({})
   const [coursesId, setCoursesId] = useState()
 
   const handleAddFormationDintiationClose = () => {
@@ -59,13 +62,41 @@ const FormationDintiation = () => {
     }
   }
 
+  const get_Formation_Dintiation_Inderface = async () => {
+    try {
+      const res = await axios.get(
+        // 'http://localhost:5000/api/get-Formation-Dintiation-Inderface',
+        'https://ma-training-consulting-company-site-backend.vercel.app/api/get-Formation-Dintiation-Inderface',
+      )
+
+      if (res.data) {
+        setFormationDintiationInderface(res.data.coursDintiationInderface)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   useEffect(() => {
     getCategoriesData()
     getAllCourses()
+    get_Formation_Dintiation_Inderface()
   }, [])
 
   return (
     <div>
+      {formationDintiationInderface.length > 0 ? (
+        <UpdeteFormationDintiationInderface
+          formationDintiationInderface={formationDintiationInderface[0]}
+          get_Formation_Dintiation_Inderface={get_Formation_Dintiation_Inderface}
+          setFormationDintiationInderface={setFormationDintiationInderface}
+        />
+      ) : (
+        <FormationDintiationInderface
+          get_Formation_Dintiation_Inderface={get_Formation_Dintiation_Inderface}
+        />
+      )}
+
       <FormationDintiationTable
         courses={courses}
         handleAddFormationDintiationOpen={handleAddFormationDintiationOpen}
