@@ -6,14 +6,21 @@ import { CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
 import UpdateFormationDintiation from '../../../components/cours/UpdateFormationDintiation'
 import FormationDintiationInderface from '../../../components/E-Trainings/FormationDintiationInderface'
 import UpdeteFormationDintiationInderface from '../../../components/E-Trainings/UpdeteFormationDintiationInderface'
+import AddEvent from '../../../components/E-Trainings/AddEvent'
+import EventsTable from '../../../components/E-Trainings/EventsTable'
+import UpdateEvent from '../../../components/E-Trainings/UpdateEvent'
 
 const FormationDintiation = () => {
   const [courses, setCourses] = useState([])
   const [categorys, setCategorys] = useState([])
   const [addFormationDintiationOpen, setAddFormationDintiationOpen] = useState(false)
   const [updateFormationDintiationOpen, setUpdateFormationDintiationOpen] = useState(false)
+  const [addEventOpen, setAddEventOpen] = useState(false)
+  const [updateEventOpen, setUpdateEventOpen] = useState(false)
   const [formationDintiationInderface, setFormationDintiationInderface] = useState([])
+  const [events, setEvents] = useState([])
   const [coursesId, setCoursesId] = useState()
+  const [eventId, setEventId] = useState()
 
   const handleAddFormationDintiationClose = () => {
     setAddFormationDintiationOpen(false)
@@ -21,6 +28,23 @@ const FormationDintiation = () => {
 
   const handleAddFormationDintiationOpen = () => {
     setAddFormationDintiationOpen(true)
+  }
+
+  const handleAddEventOpen = () => {
+    setAddEventOpen(true)
+  }
+
+  const handleAddEventClose = () => {
+    setAddEventOpen(false)
+  }
+
+  const handleUpdateEventOpen = (id) => {
+    setEventId(id)
+    setUpdateEventOpen(id)
+  }
+
+  const handleUpdateEventClose = () => {
+    setUpdateEventOpen(false)
   }
 
   const handleUpdateFormationDintiationClose = () => {
@@ -41,6 +65,21 @@ const FormationDintiation = () => {
 
       if (res.data) {
         setCourses(res.data.course)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const getAllEvents = async () => {
+    try {
+      const res = await axios.get(
+        // 'http://localhost:5000/api/get-Event-Data',
+        'https://ma-training-consulting-company-site-backend.vercel.app/api/get-Event-Data',
+      )
+
+      if (res.data) {
+        setEvents(res.data)
       }
     } catch (error) {
       console.error(error)
@@ -81,6 +120,7 @@ const FormationDintiation = () => {
     getCategoriesData()
     getAllCourses()
     get_Formation_Dintiation_Inderface()
+    getAllEvents()
   }, [])
 
   return (
@@ -105,6 +145,14 @@ const FormationDintiation = () => {
         setCourses={setCourses}
       />
 
+      <EventsTable
+        handleAddEventOpen={handleAddEventOpen}
+        events={events}
+        handleUpdateEventOpen={handleUpdateEventOpen}
+        setEvents={setEvents}
+      />
+
+      {/* dialog ajouter une formation Dintiation */}
       <CModal
         visible={addFormationDintiationOpen}
         onClose={handleAddFormationDintiationClose}
@@ -122,6 +170,7 @@ const FormationDintiation = () => {
         </CModalBody>
       </CModal>
 
+      {/* dialog modifier une formation Dintiation */}
       <CModal
         visible={updateFormationDintiationOpen}
         onClose={handleUpdateFormationDintiationClose}
@@ -136,6 +185,30 @@ const FormationDintiation = () => {
             categorys={categorys}
             handleUpdateFormationDintiationClose={handleUpdateFormationDintiationClose}
             getAllCourses={getAllCourses}
+          />
+        </CModalBody>
+      </CModal>
+
+      {/* dialog Ajouter Un événement */}
+      <CModal visible={addEventOpen} onClose={handleAddEventClose} size="lg">
+        <CModalHeader closeButton>
+          <CModalTitle>Ajouter Un événement</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <AddEvent handleAddEventClose={handleAddEventClose} getAllEvents={getAllEvents} />
+        </CModalBody>
+      </CModal>
+
+      {/* dialog Modifier Un événement */}
+      <CModal visible={updateEventOpen} onClose={handleUpdateEventClose} size="lg">
+        <CModalHeader closeButton>
+          <CModalTitle>Modifier Un événement</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <UpdateEvent
+            handleUpdateEventClose={handleUpdateEventClose}
+            getAllEvents={getAllEvents}
+            eventId={eventId}
           />
         </CModalBody>
       </CModal>
