@@ -60,14 +60,9 @@ const EventsTable = ({
                     }}
                     scope="col"
                   >
-                    non de formation
+                    non de événement
                   </th>
-                  <th scope="col" className="text-center">
-                    Units Sold
-                  </th>
-                  <th scope="col" className="text-center">
-                    In Stock
-                  </th>
+
                   <th scope="col"> Date</th>
                   <th scope="col">&nbsp;</th>
                 </tr>
@@ -77,8 +72,7 @@ const EventsTable = ({
                   events.map((item, index) => (
                     <tr key={index}>
                       <td className="tm-product-name">{item.event_title}</td>
-                      <td className="text-center">145</td>
-                      <td className="text-center">255</td>
+
                       <td>{item.event_date} </td>
                       <td>
                         <i
