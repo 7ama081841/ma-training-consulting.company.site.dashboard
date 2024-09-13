@@ -3,7 +3,7 @@ import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage
 import { storage } from '../../config/firebaseConfig'
 import { CButton } from '@coreui/react'
 
-const SliceComponent = ({ item, index, setFreeCoursData }) => {
+const SliceComponent = ({ item, index, setSession }) => {
   const [slide, setSlide] = useState({})
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const SliceComponent = ({ item, index, setFreeCoursData }) => {
         console.error(error)
       })
 
-    setFreeCoursData((prevState) => ({
+    setSession((prevState) => ({
       ...prevState,
       cour_presentation: prevState.cour_presentation.filter((_, index) => index !== indexDelete),
     }))
@@ -91,7 +91,7 @@ const SliceComponent = ({ item, index, setFreeCoursData }) => {
       presentation_image: presentation_image_url,
     }
 
-    setFreeCoursData((prevState) => ({
+    setSession((prevState) => ({
       ...prevState,
       cour_presentation: prevState.cour_presentation?.map((item, i) =>
         i === index ? updatedSlide : item,
